@@ -36,7 +36,7 @@ def AddUser():
     prenom = content['prenom']
     email = content['email']
     adresse = content['adresse']
-    date = content['date naissance']
+    date = content['date']
     username = content['username']
     password = content['password']
     # db = conn.database
@@ -46,7 +46,7 @@ def AddUser():
         "prenom": prenom,
         "email": email,
         "adresse": adresse,
-        "date naissance": date,
+        "date": date,
         "username": username,
         "password": password
     }
@@ -99,7 +99,7 @@ def UpdateUser():
     prenom = content['prenom']
     email = content['email']
     address = content['adresse']
-    date = content['date naissance']
+    date = content['date']
     username = request.args.get("username")
     password = content['password']
     s = collection.find_one({"username": username})
@@ -109,7 +109,7 @@ def UpdateUser():
             "prenom": prenom,
             "email": email,
             "adresse": address,
-            "date naissance": date,
+            "date": date,
             "username": username,
             "password": password
         }
