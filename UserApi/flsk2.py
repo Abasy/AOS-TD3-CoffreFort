@@ -16,6 +16,16 @@ With usage of variables in the app.route
 
 @app.route('/api/add', methods=['POST'])
 def AddUser():
+    #if request.method == "POST":
+    #    print("got request method POST")
+    #if request.is_json:
+    #    print("is json")
+    #    data = request.get_json()
+    #    print("type of data {}".format(type(data))) # type dict
+    #    print("data as string {}".format(json.dumps(data)))
+    #    print ("keys {}".format(json.dumps(data.keys())))
+    #    return jsonify(message='success')
+
     content = request.get_json()
     nom = content['nom']
     prenom = content['prenom']

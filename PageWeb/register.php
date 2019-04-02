@@ -21,14 +21,14 @@ require_once('../PageWeb/header.php');
 		<div class="widget-shadow">
 			<div class="login-body">
 				<form class="wow fadeInUp animated" data-wow-delay=".7s"  action="../PageWeb/register.php" method="post" enctype="multipart/form-data">
-					<input type="text" class="uemail" id="firstname" name="firstname" placeholder="Votre Nom" required="">
-					<input type="text" class="uemail" id="lastname" name="lastname" placeholder="Votre Prenom" required="">
+					<input type="text" class="uemail" id="nom" name="nom" placeholder="Votre Nom" required="">
+					<input type="text" class="uemail" id="prenom" name="prenom" placeholder="Votre Prenom" required="">
 					<input type="text" class="uemail"  id="email" name="email" placeholder="Adresse E-mail" required="">
-					<input type="text" class="uemail"  id="address" name="address" placeholder="Addresse postale" required="">
-					<input type="text" class="uemail" id="birthday" name="birthday" placeholder="Date de naissance" required="">
+					<input type="text" class="uemail"  id="adresse" name="adresse" placeholder="Adresse postale" required="">
+					<input type="text" class="uemail" id="date" name="date" placeholder="Date de naissance" required="">
 					<input type="text" class="uemail" id="username" name="username" placeholder="Votre Username" required="">
 					<input type="password" id="password" name="password" n class="lock" placeholder="Mot de Passe">
-					<input type="password" id="password_verify" name="password_verify" n class="lock" placeholder="Vérifier votre mot de passe">
+					<!--<input type="password" id="password_verify" name="password_verify" n class="lock" placeholder="Vérifier votre mot de passe">-->
 					<input type="submit" name="register" value="S'inscrire">
 				</form>
 			</div>
@@ -39,11 +39,11 @@ require_once('../PageWeb/header.php');
 		<?php
 			if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 				$myRegister = new \stdClass();;
-				$myRegister->firstname = $_POST['firstname'];
-				$myRegister->lastname = $_POST['lastname'];
+				$myRegister->nom = $_POST['nom'];
+				$myRegister->prenom = $_POST['prenom'];
 				$myRegister->email = $_POST['email'];
-				$myRegister->address = $_POST['address'];
-				$myRegister->birthday = $_POST['birthday'];
+				$myRegister->address = $_POST['adresse'];
+				$myRegister->date = $_POST['date'];
 				$myRegister->username = $_POST['username'];
 				$myRegister->password = $_POST['password'];
 				//$myRegister->password_verify = $_POST['password_verify'];
@@ -56,8 +56,9 @@ require_once('../PageWeb/header.php');
 				curl_setopt($crl, CURLOPT_CUSTOMREQUEST, "POST");
 				curl_setopt($crl, CURLOPT_POSTFIELDS, $myJSON);
 				curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($crl, CURLOPT_HTTPHEADER, $myJSON);
+				//curl_setopt($crl, CURLOPT_HTTPHEADER, $myJSON);
 				$result = curl_exec($crl);
+				print_r($result);
 			}
 		?>
 	</div>
