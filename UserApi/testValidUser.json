@@ -1,4 +1,9 @@
 {
-  "LASTNAME" : "PHIL",
-  "FIRSTNAME" : "Chart"
+	"nom":"OURKIA",
+	"prenom":"FIFI",
+	"email":"YASSIN@ata.fr",
+	"adresse":"Agadir",
+	"date naissance":"05-05-1995",
+	"username":"yassin",
+	"password":"ourkia"
 }

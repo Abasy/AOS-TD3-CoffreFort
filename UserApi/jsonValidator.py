@@ -15,10 +15,10 @@ def fonction_demo(dict_to_test, dict_valid):
 
 
 if __name__ == '__main__':
-    with open("./testNotValidUser.json", "r") as fichier:
+    with open("testNotValidUser.json", "r") as fichier:
         dict_to_test = json.load(fichier)
 
-    with open("./userSchem.json", "r") as fichier:
+    with open("userSchem.json", "r") as fichier:
         dict_valid = json.load(fichier)
 
     fonction_demo(dict_to_test, dict_valid)

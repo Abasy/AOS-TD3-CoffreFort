@@ -50,7 +50,7 @@ def AddUser():
 
 
 @app.route('/api/auth', methods=['GET'])
-def get_one_star():
+def authentification():
     # content = request.get_json()
     name = request.args.get("username")
     password = request.args.get("password")
@@ -113,6 +113,7 @@ def DeleteUser():
 def person(person_id):
     response = jsonify({'Hello': person_id})
     return response
+
 
 
 
