@@ -1,6 +1,11 @@
 import json
 
 from flask import Flask, jsonify, request
+import zmq
+import random
+import sys
+import time
+
 
 app = Flask(__name__)
 from flask_pymongo import PyMongo
@@ -62,16 +67,28 @@ def AddUser():
 @app.route('/api/auth', methods=['GET'])
 def authentification():
     # content = request.get_json()
+
     name = request.args.get("username")
     password = request.args.get("password")
     print(name + " :" + password)
     s = mongo.db.users.find_one({"username": name, "password": password})
     print(s)
-    if s:
-        output = "Connected"
-    else:
-        output = "No such name"
-    return jsonify({"result": output})
+    port = "5556"
+    context = zmq.Context()
+    socket = context.socket(zmq.PAIR)
+    socket.connect("tcp://localhost:%s" % port)
+    msg = None
+    while True:
+        socket.send_string("username")
+        time.sleep(1)
+        if s:
+            port = "5566"
+            socket.connect("tcp://localhost:%s" % port)
+            while msg==None:
+                msg = socket.recv()
+        else:
+            msg = "Failed to connect"
+    return jsonify({"result": msg})
 
 
 @app.route('/api/update', methods=['POST'])
