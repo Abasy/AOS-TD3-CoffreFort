@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="90748d66-21f9-44df-b71c-ead6749f4d2f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flsk2.py" beforeDir="false" afterPath="$PROJECT_DIR$/flsk2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonValidator.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonValidator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testNotValidUser.json" beforeDir="false" afterPath="$PROJECT_DIR$/testNotValidUser.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testValidUser.json" beforeDir="false" afterPath="$PROJECT_DIR$/testValidUser.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userSchem.json" beforeDir="false" afterPath="$PROJECT_DIR$/userSchem.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,7 +15,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/flsk2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
+            <state relative-caret-position="354">
               <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -257,7 +252,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/flsk2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
+        <state relative-caret-position="354">
           <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
