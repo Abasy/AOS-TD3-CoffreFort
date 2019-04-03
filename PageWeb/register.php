@@ -20,14 +20,14 @@ require_once('../PageWeb/header.php');
 		</div>
 		<div class="widget-shadow">
 			<div class="login-body">
-				<form class="wow fadeInUp animated" data-wow-delay=".7s"  action="../PageWeb/register.php" method="post" enctype="multipart/form-data">
-					<input type="text" class="uemail" id="nom" name="nom" placeholder="Votre Nom" required="">
-					<input type="text" class="uemail" id="prenom" name="prenom" placeholder="Votre Prenom" required="">
-					<input type="text" class="uemail"  id="email" name="email" placeholder="Adresse E-mail" required="">
-					<input type="text" class="uemail"  id="adresse" name="adresse" placeholder="Adresse postale" required="">
-					<input type="text" class="uemail" id="date" name="date" placeholder="Date de naissance" required="">
-					<input type="text" class="uemail" id="username" name="username" placeholder="Votre Username" required="">
-					<input type="password" id="password" name="password" n class="lock" placeholder="Mot de Passe">
+				<form class="wow fadeInUp animated" data-wow-delay=".7s"  action="../PageWeb/index.php" method="post" enctype="application/json">
+					<input type="text" class="uemail" id="nom" name="nom" value="Abasy" placeholder="Votre Nom" required="">
+					<input type="text" class="uemail" id="prenom" name="prenom" value="Nadjim" placeholder="Votre Prenom" required="">
+					<input type="text" class="uemail"  id="email" name="email" value="abasy@nadjim.fr" placeholder="Adresse E-mail" required="">
+					<input type="text" class="uemail"  id="adresse" name="adresse" value="3 rue pipoune" placeholder="Adresse postale" required="">
+					<input type="text" class="uemail" id="date" name="date" value="15-15-15" placeholder="Date de naissance" required="">
+					<input type="text" class="uemail" id="username" name="username" value="nabasy" placeholder="Votre Username" required="">
+					<input type="password" id="password" name="password" n class="lock" value="test" placeholder="Mot de Passe">
 					<!--<input type="password" id="password_verify" name="password_verify" n class="lock" placeholder="Vérifier votre mot de passe">-->
 					<input type="submit" name="register" value="S'inscrire">
 				</form>
@@ -35,33 +35,6 @@ require_once('../PageWeb/header.php');
 		</div>
 	</div>
 	<!--//login-->
-	<div>
-		<?php
-			if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-				$myRegister = new \stdClass();;
-				$myRegister->nom = $_POST['nom'];
-				$myRegister->prenom = $_POST['prenom'];
-				$myRegister->email = $_POST['email'];
-				$myRegister->address = $_POST['adresse'];
-				$myRegister->date = $_POST['date'];
-				$myRegister->username = $_POST['username'];
-				$myRegister->password = $_POST['password'];
-				//$myRegister->password_verify = $_POST['password_verify'];
-
-				$myJSON = json_encode($myRegister);
-
-				echo $myJSON;
-
-				$crl = curl_init("http://localhost:4321/api/add");
-				curl_setopt($crl, CURLOPT_CUSTOMREQUEST, "POST");
-				curl_setopt($crl, CURLOPT_POSTFIELDS, $myJSON);
-				curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
-				//curl_setopt($crl, CURLOPT_HTTPHEADER, $myJSON);
-				$result = curl_exec($crl);
-				print_r($result);
-			}
-		?>
-	</div>
 	<br><br><br><br>
 <?php
 require_once('../PageWeb/footer.php');
