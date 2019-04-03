@@ -2,6 +2,8 @@ import json
 
 from flask import Flask, jsonify, request
 import zmq
+import json
+from jsonschema import validate
 import random
 import sys
 import time
@@ -23,45 +25,41 @@ With usage of variables in the app.route
 def AddUser():
     #if request.method == "POST":
     #    print("got request method POST")
-    #if request.is_json:
-    #    print("is json")
-    #    data = request.get_json()
-    #    print("type of data {}".format(type(data))) # type dict
-    #    print("data as string {}".format(json.dumps(data)))
-    #    print ("keys {}".format(json.dumps(data.keys())))
-    #    return jsonify(message='success')
-
-    content = request.get_json()
-    nom = content['nom']
-    prenom = content['prenom']
-    email = content['email']
-    adresse = content['adresse']
-    date = content['date naissance']
-    username = content['username']
-    password = content['password']
-    # db = conn.database
-    collection = mongo.db.users
-    data = {
-        "nom": nom,
-        "prenom": prenom,
-        "email": email,
-        "adresse": adresse,
-        "date naissance": date,
-        "username": username,
-        "password": password
-    }
-    # Insert Data
-    rec_id1 = collection.insert_one(data)
-    if rec_id1:
-        response = jsonify({"result": "Add Success"})
-    else:
-        response = jsonify({"result": "Add Failed"})
-    print("Data inserted with record ids", rec_id1)
-    # Printing the data inserted
-    cursor = collection.find()
-    for record in cursor:
-        print(record)
-    return response
+    if request.is_json:
+        content = request.get_json()
+        with open("userSchem.json", "r") as fichier:
+            dict_valid = json.load(fichier)
+        if fonction_demo(content, dict_valid):
+            nom = content['nom']
+            prenom = content['prenom']
+            email = content['email']
+            adresse = content['adresse']
+            date = content['date naissance']
+            username = content['username']
+            password = content['password']
+            # db = conn.database
+            collection = mongo.db.users
+            data = {
+                "nom": nom,
+                "prenom": prenom,
+                "email": email,
+                "adresse": adresse,
+                "date naissance": date,
+                "username": username,
+                "password": password
+            }
+            # Insert Data
+            rec_id1 = collection.insert_one(data)
+            if rec_id1:
+                response = jsonify({"result": "Add Success"})
+            else:
+                response = jsonify({"result": "Add Failed"})
+            print("Data inserted with record ids", rec_id1)
+        # Printing the data inserted
+        cursor = collection.find()
+        for record in cursor:
+            print(record)
+        return response
 
 
 @app.route('/api/auth', methods=['GET'])
@@ -141,7 +139,14 @@ def person(person_id):
     response = jsonify({'Hello': person_id})
     return response
 
-
+def fonction_demo(dict_to_test, dict_valid):
+    try:
+        validate(dict_to_test, dict_valid)
+    except Exception as valid_err:
+        print("Validation KO: {}".format(valid_err))
+        raise valid_err
+    else:
+        return True
 
 
 

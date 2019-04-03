@@ -10,8 +10,7 @@ def fonction_demo(dict_to_test, dict_valid):
         print("Validation KO: {}".format(valid_err))
         raise valid_err
     else:
-        # Realise votre travail
-        print("JSON validé")
+        return True
 
 
 if __name__ == '__main__':
