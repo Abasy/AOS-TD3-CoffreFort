@@ -74,20 +74,22 @@ def authentification():
     s = mongo.db.users.find_one({"username": name, "password": password})
     print(s)
     port = "5556"
-    context = zmq.Context()
-    socket = context.socket(zmq.PAIR)
-    socket.connect("tcp://localhost:%s" % port)
+    #context = zmq.Context()
+    #socket = context.socket(zmq.PAIR)
+    #socket.connect("tcp://localhost:%s" % port)
     msg = None
-    while True:
-        socket.send_string("username")
-        time.sleep(1)
-        if s:
-            port = "5566"
-            socket.connect("tcp://localhost:%s" % port)
-            while msg==None:
-                msg = socket.recv()
-        else:
-            msg = "Failed to connect"
+    #while True:
+        #socket.send_string(name)
+    print(name)
+    #time.sleep(1)
+    if s:
+        port = "5566"
+        #socket.connect("tcp://localhost:%s" % port)
+        #while msg==None:
+        #    msg = socket.recv()
+        msg="connected"
+    else:
+        msg = "Failed to connect"
     return jsonify({"result": msg})
 
 
