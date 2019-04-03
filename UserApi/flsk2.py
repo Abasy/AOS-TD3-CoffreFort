@@ -34,7 +34,7 @@ def AddUser():
             prenom = content['prenom']
             email = content['email']
             adresse = content['adresse']
-            date = content['date naissance']
+            date = content['date']
             username = content['username']
             password = content['password']
             # db = conn.database
@@ -44,7 +44,7 @@ def AddUser():
                 "prenom": prenom,
                 "email": email,
                 "adresse": adresse,
-                "date naissance": date,
+                "date": date,
                 "username": username,
                 "password": password
             }
@@ -55,10 +55,12 @@ def AddUser():
             else:
                 response = jsonify({"result": "Add Failed"})
             print("Data inserted with record ids", rec_id1)
+        else:
+            response=jsonify({"result":"Format Json non compatible"})
         # Printing the data inserted
-        cursor = collection.find()
-        for record in cursor:
-            print(record)
+        #cursor = collection.find()
+        #for record in cursor:
+         #   print(record)
         return response
 
 
@@ -143,8 +145,7 @@ def fonction_demo(dict_to_test, dict_valid):
     try:
         validate(dict_to_test, dict_valid)
     except Exception as valid_err:
-        print("Validation KO: {}".format(valid_err))
-        raise valid_err
+        return False
     else:
         return True
 
