@@ -19,7 +19,7 @@ require_once('../PageWeb/header.php');
 		</div>
 		<div class="widget-shadow">
 			<div class="login-body wow fadeInUp animated" data-wow-delay=".7s">
-				<form action="../PageWeb/signin.php" method="post">
+				<form action="../PageWeb/signin.php" method="get">
 					<input type="text" class="user" name="username" value="nabasy" placeholder="Username" required="">
 					<input type="password" class="lock" name="user_password" value="test" placeholder="Mot de passe">
 					<input type="submit" name="login" value="Se connecter">
@@ -38,25 +38,12 @@ require_once('../PageWeb/header.php');
 	<!--//login-->
 	<div>
 		<?php
-			if(isset($_POST['login'])){
-				$connection = array(
-					'username' => $_POST['username'],
-					'password' => $_POST['user_password']
-				);
-
-				$myJSON = json_encode($connection);
-
-				$crl = curl_init("http://localhost:4321/api/auth");
+			if(isset($_GET['login'])){
+				$crl = curl_init("http://localhost:4321/api/auth?username=".$_GET['username']."&password=".$_GET['user_password']);
 				curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($crl, CURLINFO_HEADER_OUT, true);
-				//curl_setopt($crl, CURLOPT_POST, true);
-				curl_setopt($crl, CURLOPT_POSTFIELDS, $myJSON);
-				curl_setopt($crl, CURLOPT_HTTPHEADER, array(
-					'Content-Type: application/json',
-					'Body:'.$myJSON,
-					'Content-Lenght:'.strlen($myJSON))
-				);
 				$result = curl_exec($crl);
+				echo $result;
 				print_r($result);
 			}
 		?>
