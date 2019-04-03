@@ -87,7 +87,7 @@ def authentification():
             socket.connect("tcp://localhost:%s" % port)
             while msg==None:
                 msg = socket.recv()
-            msg="connected"
+            #msg="connected"
         else:
             msg = "Failed to connect"
     return jsonify({"result": msg})
@@ -96,34 +96,40 @@ def authentification():
 @app.route('/api/update', methods=['POST'])
 def UpdateUser():
     collection = mongo.db.users
-    content = request.get_json()
-    nom = content['nom']
-    prenom = content['prenom']
-    email = content['email']
-    address = content['adresse']
-    date = content['date']
-    username = request.args.get("username")
-    password = content['password']
-    s = collection.find_one({"username": username})
-    if s:
-        data = {
-            "nom": nom,
-            "prenom": prenom,
-            "email": email,
-            "adresse": address,
-            "date": date,
-            "username": username,
-            "password": password
-        }
-        # Update Data
-        rec_id1 = collection.update({"username": username}, {"$set": data})
-        if rec_id1:
-            response = "Update Success"
-            print("Data inserted with record ids", response)
+    if request.is_json:
+        content = request.get_json()
+        with open("userSchem.json", "r") as fichier:
+            dict_valid = json.load(fichier)
+        if fonction_demo(content, dict_valid):
+            nom = content['nom']
+            prenom = content['prenom']
+            email = content['email']
+            address = content['adresse']
+            date = content['date']
+            username = request.args.get("username")
+            password = content['password']
+            s = collection.find_one({"username": username})
+            if s:
+                data = {
+                    "nom": nom,
+                    "prenom": prenom,
+                    "email": email,
+                    "adresse": address,
+                    "date": date,
+                    "username": username,
+                    "password": password
+                }
+                # Update Data
+                rec_id1 = collection.update({"username": username}, {"$set": data})
+                if rec_id1:
+                    response = "Update Success"
+                    print("Data inserted with record ids", response)
+                else:
+                    response = "Update Failed"
+            else:
+                response = "No such name"
         else:
-            response = "Update Failed"
-    else:
-        response = "No such name"
+            response = "Form invalid"
     return jsonify({'result': response})
 
 
