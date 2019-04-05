@@ -70,11 +70,13 @@
 
 				if(strcmp($result, 'Failed to connect') <> 0){ //Si c'est ok, utilisateur existe. On crée une session pour lui
 					$_SESSION['userid'] = $result; //Doit récupérer le tokenDealer
-					$_SESSION['username'] = $username;
-					header('Location: ../PageWeb/index.php');
+					//$_SESSION['username'] = $username;
+					//header('Location: ../PageWeb/index.php');
+					print($result);
 				}else{
 					$_SESSION['error_authentication'] = 'Sorry but the authentication is failed';
-					header('Location: ../PageWeb/signin.php');
+					//header('Location: ../PageWeb/signin.php');
+					print($_SESSION['error_authentication']);
 				}
 			}
 		?>
