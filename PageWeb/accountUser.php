@@ -110,10 +110,19 @@
 					
 					$myJSON = json_encode($myRegister);
 					//echo $myJSON;
-					unset($_SESSION['result']);
-					$_SESSION['result'] = $myJSON;
+					unset($_SESSION['connect']);
+					unset($_SESSION['username']);
 
-					echo $_SESSION['result'];
+					$connection = array(
+						'username' => $_POST['username'],
+						'password' => $password
+					);
+
+					$myJSONconnect = json_encode($connection);
+					$_SESSION['connect'] = $myJSONconnect;
+					$_SESSION['username'] = $_POST['username'];
+
+					echo $_SESSION['connect'];
 
 					$crl = curl_init("http://localhost:4321/api/update");
 					curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);

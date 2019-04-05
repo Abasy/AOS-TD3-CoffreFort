@@ -15,6 +15,8 @@
 				$header = array();
 				$header[] = 'token_coffre_fort: '.$_SESSION['userid'];
 
+				echo 'token_coffre_fort: '.$_SESSION['userid'];
+				
 				curl_setopt($crl, CURLOPT_HTTPHEADER,$header);
 				$result = curl_exec($crl);
 				

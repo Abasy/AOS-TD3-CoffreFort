@@ -53,8 +53,6 @@
 				);
 				$myJSON = json_encode($connect);
 
-				$_SESSION['connect'] = $myJSON;
-				
 				$crl = curl_init("http://localhost:4321/api/auth");
 				curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($crl, CURLINFO_HEADER_OUT, true);
@@ -70,13 +68,12 @@
 
 				if(strcmp($result, 'Failed to connect') <> 0){ //Si c'est ok, utilisateur existe. On crée une session pour lui
 					$_SESSION['userid'] = $result; //Doit récupérer le tokenDealer
-					//$_SESSION['username'] = $username;
-					//header('Location: ../PageWeb/index.php');
-					print($result);
+					$_SESSION['username'] = $_POST['username'];
+					$_SESSION['connect'] = $myJSON;
+					header('Location: ../PageWeb/index.php');
 				}else{
 					$_SESSION['error_authentication'] = 'Sorry but the authentication is failed';
-					//header('Location: ../PageWeb/signin.php');
-					print($_SESSION['error_authentication']);
+					header('Location: ../PageWeb/signin.php');
 				}
 			}
 		?>
