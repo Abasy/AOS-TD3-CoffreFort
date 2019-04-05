@@ -1,5 +1,5 @@
 <?php
-	session_start();
+	session_start();	
 ?>
 
 <!DOCTYPE html>
@@ -12,9 +12,9 @@
 		<div class="top-header navbar navbar-default"><!--header-one-->
 			<div class="container">
 				<?php
-					if(isset($_SESSION['user_id']) && isset($_SESSION['user_name'])){
+					if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
 						echo '<div class="nav navbar-nav wow fadeInLeft animated" data-wow-delay=".5s">
-								<p>Bienvenue chez Secure Coffre Fort'.$_SESSION['user_name'].'</p><a href="../PageWeb/signout.php" >Se déconnecter </a>
+								<p>Bienvenue chez Secure Coffre Fort '.$_SESSION['username'].' <a href="../PageWeb/signout.php" >Se déconnecter </a> - <a href="../PageWeb/accountUser.php">My Account</a></p>
 							</div>';
 					}
 					else 

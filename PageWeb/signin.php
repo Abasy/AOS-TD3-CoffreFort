@@ -1,5 +1,5 @@
 <?php
-require_once('../PageWeb/header.php');
+	require_once('../PageWeb/header.php');
 ?>
 	<!--breadcrumbs-->
 	<div class="breadcrumbs">
@@ -38,13 +38,33 @@ require_once('../PageWeb/header.php');
 	<!--//login-->
 	<div>
 		<?php
+			if (isset($_SESSION['error_authentication'])) {
+				echo '<p>'.$_SESSION['error_authentication'].'</p>';
+				unset($_SESSION['error_authentication']);
+			}
+		?>
+	</div>
+	<div>
+		<?php
 			if(isset($_GET['login'])){
-				$crl = curl_init("http://localhost:4321/api/auth?username=".$_GET['username']."&password=".$_GET['user_password']);
+				$username = $_GET['username'];
+				$password = $_GET['user_password'];
+
+				/*$crl = curl_init("http://localhost:4321/api/auth?username=".$username."&password=".$password);
 				curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($crl, CURLINFO_HEADER_OUT, true);
+
 				$result = curl_exec($crl);
-				echo $result;
-				print_r($result);
+				if($result <> 'Failed to connect'){ //Si c'est ok, utilisateur existe. On crée une session pour lui
+				*/
+				if('fhfdhw4fh564wfdhw4hwf4hwfh6whrhqe6h' <> 'Failed to connect'){
+					$_SESSION['userid'] = 'fhfdhw4fh564wfdhw4hwf4hwfh6whrhqe6h'; //Doit récupérer le tokenDealer
+					$_SESSION['username'] = $username;
+					header('Location: ../PageWeb/index.php');
+				}else{
+					$_SESSION['error_authentication'] = 'Sorry but the authentication is failed';
+					header('Location: ../PageWeb/signin.php');
+				}
 			}
 		?>
 	</div>

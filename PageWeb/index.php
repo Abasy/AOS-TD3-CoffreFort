@@ -1,29 +1,30 @@
 <?php
-
 	require_once('../PageWeb/header.php');
 ?>
 <br><br><br><br>
-<p>Message système </p>
 
 <div>
 	<?php
-		//if(isset($_POST['login'])){
+		//if(($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['login'])){
 			//Vérifier si l'utilisateur existe vraiment
-			if(isset($_SESSION['user_id']) && isset($_SESSION['user_name'])){
+			if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
+				//Afficher la ressource ici
+				echo '<div> Ressources disponible : ';
+
 				$crl = curl_init("http://localhost:5000/api/arp");
 
 				$header = array();
-				$header[] = 'token_coffre_fort: qsdgqgsdv45<4v6<4db6v4';
+				$header[] = 'token_coffre_fort: '.$_SESSION['userid'];
 
 				curl_setopt($crl, CURLOPT_HTTPHEADER,$header);
-				$rest = curl_exec($crl);
+				$result = curl_exec($crl);
 				
 				curl_close($crl);
-				print_r($rest);
+				echo '</div>';
+				//print_r($rest);
 			}else{
-				echo 'No authenticate';
+				echo '<div><p>Not authenticate ? You will don\'t get the ressources ! </p></div>';
 			}
-		//}
 
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['register'])){
 			$myRegister = array(
@@ -35,7 +36,7 @@
 				'username' => $_POST['username'],
 				'password' => $_POST['password']
 			);
-
+			
 			$myJSON = json_encode($myRegister);
 			//echo $myJSON;
 
@@ -50,6 +51,8 @@
 				'Content-Lenght:'.strlen($myJSON))
 			);
 			$result = curl_exec($crl);
+
+			echo '<div> Inscription réussie : '.$result.'</div>';
 			curl_close($crl);
 		}
 	?>
