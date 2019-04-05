@@ -72,7 +72,7 @@ def authentification():
     print(name + " :" + password)
     s = mongo.db.users.find_one({"username": name, "password": password})
     print(s)
-    port = "5556"
+    port = "5578"
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://localhost:%s" % port)
@@ -81,8 +81,8 @@ def authentification():
     print(name)
     if s:
         while msg == None:
-            msg = socket.recv()
-            # msg="connected"
+            str = socket.recv()
+            msg = str.decode("UTF-8")
     else:
         msg = "Failed to connect"
     return jsonify({"result": msg})
@@ -96,23 +96,23 @@ def getUser():
     print(name + " :" + password)
     s = mongo.db.users.find_one({"username": name, "password": password})
     if s:
-        nom=s["nom"]
-        prenom=s["prenom"]
-        email=s["email"]
-        adresse=s["adresse"]
-        date=s["date"]
-        username=s["username"]
-        password=s["password"]
-        data ={
-            "nom":nom,
-            "prenom":prenom,
-            "email":email,
-            "adresse":adresse,
-            "date":date,
-            "username":username,
-            "password":password
+        nom = s["nom"]
+        prenom = s["prenom"]
+        email = s["email"]
+        adresse = s["adresse"]
+        date = s["date"]
+        username = s["username"]
+        password = s["password"]
+        data = {
+            "nom": nom,
+            "prenom": prenom,
+            "email": email,
+            "adresse": adresse,
+            "date": date,
+            "username": username,
+            "password": password
         }
-        msg =jsonify(data)
+        msg = jsonify(data)
     else:
         msg = jsonify({"result": "No user founded with this inputs"})
     return msg
