@@ -68,28 +68,24 @@ def AddUser():
 def authentification():
     # content = request.get_json()
 
-    name = request.args.get("username")
-    password = request.args.get("password")
-    print(name + " :" + password)
-    s = mongo.db.users.find_one({"username": name, "password": password})
-    print(s)
-    port = "5556"
-    context = zmq.Context()
-    socket = context.socket(zmq.PAIR)
-    socket.connect("tcp://localhost:%s" % port)
-    msg = None
-    while True:
-        socket.send_string(name)
-        print(name)
-        time.sleep(1)
-        if s:
-            port = "5566"
-            socket.connect("tcp://localhost:%s" % port)
-            while msg==None:
-                msg = socket.recv()
-            #msg="connected"
-        else:
-            msg = "Failed to connect"
+	name = request.args.get("username")
+	password = request.args.get("password")
+	print(name + " :" + password)
+	s = mongo.db.users.find_one({"username": name, "password": password})
+	print(s)
+	port = "5556"
+	context = zmq.Context()
+	socket = context.socket(zmq.REQ)
+	socket.connect("tcp://localhost:%s" % port)
+	msg = None
+	socket.send_string(name)
+	print(name)
+		if s:
+			while msg==None:
+				msg = socket.recv()
+				#msg="connected"
+		else:
+			msg = "Failed to connect"
     return jsonify({"result": msg})
 
 
