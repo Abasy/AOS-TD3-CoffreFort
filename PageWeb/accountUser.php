@@ -19,21 +19,27 @@
 		</div>
 		<div class="widget-shadow">
 			<div class="login-body">
-				<form class="wow fadeInUp animated" data-wow-delay=".7s"  action="../PageWeb/accountUser.php" method="post" enctype="application/json">
+				<?php
+					$crl = curl_init("http://localhost:4321/api/person?username=".$_SESSION['username']);
+					curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($crl, CURLINFO_HEADER_OUT, true);
 
-					<?php
+					$json = curl_exec($crl);
+					$_SESSION['result']=$json;
+					$result = json_decode($json);
 
-						echo '<input type="text" class="uemail" id="nom" name="nom" value="Abasy" placeholder="Votre Nom" required="">';
+					echo '<form class="wow fadeInUp animated" data-wow-delay=".7s"  action="../PageWeb/accountUser.php" method="post" enctype="application/json">';
+						echo '<input type="text" class="uemail" id="nom" name="nom" value="'.$result->{'nom'}.'" placeholder="Votre Nom" required="">';
 
-						echo '<input type="text" class="uemail" id="prenom" name="prenom" value="Nadjim" placeholder="Votre Prenom" required="">';
+						echo '<input type="text" class="uemail" id="prenom" name="prenom" value="'.$result->{'prenom'}.'" placeholder="Votre Prenom" required="">';
 
-						echo '<input type="text" class="uemail"  id="email" name="email" value="abasy@nadjim.fr" placeholder="Adresse E-mail" required="">';
+						echo '<input type="text" class="uemail"  id="email" name="email" value="'.$result->{'email'}.'" placeholder="Adresse E-mail" required="">';
 
-						echo '<input type="text" class="uemail"  id="adresse" name="adresse" value="3 rue pipoune" placeholder="Adresse postale" required="">';
+						echo '<input type="text" class="uemail"  id="adresse" name="adresse" value="'.$result->{'adresse'}.'" placeholder="Adresse postale" required="">';
 
-						echo '<input type="text" class="uemail" id="date" name="date" value="15-15-15" placeholder="Date de naissance" required="">';
+						echo '<input type="text" class="uemail" id="date" name="date" value="'.$result->{'date'}.'" placeholder="Date de naissance" required="">';
 
-						echo '<input type="text" class="uemail" id="username" name="username" value="nabasy" placeholder="Votre Username" required="">';
+						echo '<input type="text" class="uemail" id="username" name="username" value="'.$result->{'username'}.'" placeholder="Votre Username" required="">';
 
 						//echo '<input type="password" id="password" name="password" n class="lock" value="test" placeholder="Mot de Passe">';
 
@@ -57,11 +63,12 @@
 	</div>
 	<div>
 		<?php
-		/*
 			if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['update'])){
 				//Vérifier qu'on est authentifié
 				if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
-					$password = "";
+					$result = json_decode($_SESSION['result']);
+					$password = $result->{'password'};
+
 					//Vérifier le nouveau mot de passe
 					if(strcmp(isset($_POST['new_password']), isset($_POST['password_verify'])) == 0){
 						$password = $_POST['new_password'];
@@ -72,7 +79,7 @@
 						header('Location: ../PageWeb/accountUser.php');
 					}
 
-					//Récupérer les nouveaux données
+					//Récupérer les nouvelles données
 					$myRegister = array(
 						'nom' => $_POST['nom'],
 						'prenom' => $_POST['prenom'],
@@ -98,7 +105,7 @@
 					);
 					$result = curl_exec($crl);
 
-					echo '<div> Modification réussie : '.$result.'</div>';
+					echo '<div> Modification réussite : '.$result.'</div>';
 					curl_close($crl);
 				}
 			}
