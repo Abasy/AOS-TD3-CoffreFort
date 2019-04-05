@@ -1,0 +1,4 @@
+>> Launch TokenDealer microservice : 
+open a terminal and point to the TokenDealer.py directory
+run command : "python TokenDealer.py 5566 5766"
+then the TokenDealer is up and it waits for a message from userApi service.
