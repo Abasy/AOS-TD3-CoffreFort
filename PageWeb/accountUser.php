@@ -56,9 +56,9 @@
 
 						echo '<input type="text" class="uemail" id="username" name="username" value="'.$result->{'username'}.'" placeholder="Votre Username" required="">';
 
-						echo '<input type="password" id="password" name="password" n class="lock" value="'.$result->{'password'}.'" placeholder="Mot de Passe">';
+						//echo '<input type="password" id="password" name="password" n class="lock" value="'.$result->{'password'}.'" placeholder="Mot de Passe">';
 
-						curl_close($crl);*/
+						curl_close($crl);
 					?>
 					
 					<input type="password" id="new_password" name="new_password" n class="lock" placeholder="Nouveau mot de passe">
@@ -83,7 +83,7 @@
 				//Vérifier qu'on est authentifié
 				if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
 					$resultsession = json_decode($_SESSION['connect']);
-					echo $resultsession;
+					//echo $resultsession;
 
 					$password = $resultsession->{'password'};
 
