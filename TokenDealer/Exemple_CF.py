@@ -3,10 +3,10 @@ import random
 import sys
 import time
 
-port = "5566"
+port = "5576"
 context = zmq.Context()
 socket = context.socket(zmq.PAIR)
-socket.connect("tcp://localhost:%s" % port)
+socket.bind("tcp://*:%s" % port)
 
 while True:
 	msg = socket.recv()
