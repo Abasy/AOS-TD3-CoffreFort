@@ -85,7 +85,7 @@ def authentification():
             msg = str.decode("UTF-8")
     else:
         msg = "Failed to connect"
-    return jsonify({"result": msg})
+    return msg
 
 
 @app.route('/api/getUser', methods=['POST'])

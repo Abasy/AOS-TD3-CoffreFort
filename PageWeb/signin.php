@@ -63,10 +63,16 @@
 					'Body:'.$myJSON,
 					'Content-Lenght:'.strlen($myJSON))
 				);
+
+				echo '<br><br>';
 				$result = curl_exec($crl);
 				curl_close($crl);
 
 				if(strcmp($result, 'Failed to connect') <> 0){ //Si c'est ok, utilisateur existe. On crée une session pour lui
+					echo "Résultat donne ".$result;
+					unset($_SESSION['userid']);
+					unset($_SESSION['username']);
+					unset($_SESSION['connect']);
 					$_SESSION['userid'] = $result; //Doit récupérer le tokenDealer
 					$_SESSION['username'] = $_POST['username'];
 					$_SESSION['connect'] = $myJSON;
