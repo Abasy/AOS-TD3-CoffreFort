@@ -8,7 +8,6 @@ import random
 import sys
 import time
 
-
 app = Flask(__name__)
 from flask_pymongo import PyMongo
 
@@ -23,7 +22,7 @@ With usage of variables in the app.route
 
 @app.route('/api/add', methods=['POST'])
 def AddUser():
-    #if request.method == "POST":
+    # if request.method == "POST":
     #    print("got request method POST")
     if request.is_json:
         content = request.get_json()
@@ -56,37 +55,67 @@ def AddUser():
                 response = jsonify({"result": "Add Failed"})
             print("Data inserted with record ids", rec_id1)
         else:
-            response=jsonify({"result":"Format Json non compatible"})
+            response = jsonify({"result": "Format Json non compatible"})
         # Printing the data inserted
-        #cursor = collection.find()
-        #for record in cursor:
-         #   print(record)
+        # cursor = collection.find()
+        # for record in cursor:
+        #   print(record)
         return response
 
 
-@app.route('/api/auth', methods=['GET'])
+@app.route('/api/auth', methods=['POST'])
 def authentification():
-    # content = request.get_json()
+    content = request.get_json()
 
-	name = request.args.get("username")
-	password = request.args.get("password")
-	print(name + " :" + password)
-	s = mongo.db.users.find_one({"username": name, "password": password})
-	print(s)
-	port = "5556"
-	context = zmq.Context()
-	socket = context.socket(zmq.REQ)
-	socket.connect("tcp://localhost:%s" % port)
-	msg = None
-	socket.send_string(name)
-	print(name)
-		if s:
-			while msg==None:
-				msg = socket.recv()
-				#msg="connected"
-		else:
-			msg = "Failed to connect"
+    name = content["username"]
+    password = content["password"]
+    print(name + " :" + password)
+    s = mongo.db.users.find_one({"username": name, "password": password})
+    print(s)
+    port = "5556"
+    context = zmq.Context()
+    socket = context.socket(zmq.REQ)
+    socket.connect("tcp://localhost:%s" % port)
+    msg = None
+    socket.send_string(name)
+    print(name)
+    if s:
+        while msg == None:
+            msg = socket.recv()
+            # msg="connected"
+    else:
+        msg = "Failed to connect"
     return jsonify({"result": msg})
+
+
+@app.route('/api/getUser', methods=['POST'])
+def getUser():
+    content = request.get_json()
+    name = content["username"]
+    password = content["password"]
+    print(name + " :" + password)
+    s = mongo.db.users.find_one({"username": name, "password": password})
+    if s:
+        nom=s["nom"]
+        prenom=s["prenom"]
+        email=s["email"]
+        adresse=s["adresse"]
+        date=s["date"]
+        username=s["username"]
+        password=s["password"]
+        data ={
+            "nom":nom,
+            "prenom":prenom,
+            "email":email,
+            "adresse":adresse,
+            "date":date,
+            "username":username,
+            "password":password
+        }
+        msg =jsonify(data)
+    else:
+        msg = jsonify({"result": "No user founded with this inputs"})
+    return msg
 
 
 @app.route('/api/update', methods=['POST'])
@@ -145,6 +174,7 @@ def person(person_id):
     response = jsonify({'Hello': person_id})
     return response
 
+
 def fonction_demo(dict_to_test, dict_valid):
     try:
         validate(dict_to_test, dict_valid)
@@ -152,8 +182,6 @@ def fonction_demo(dict_to_test, dict_valid):
         return False
     else:
         return True
-
-
 
 
 if __name__ == '__main__':
