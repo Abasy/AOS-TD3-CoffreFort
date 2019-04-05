@@ -10,7 +10,6 @@
 			if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
 				//Afficher la ressource ici
 				echo '<div> Ressources disponible : ';
-
 				$crl = curl_init("http://localhost:5000/api/arp");
 
 				$header = array();
@@ -38,7 +37,6 @@
 			);
 			
 			$myJSON = json_encode($myRegister);
-			//echo $myJSON;
 
 			$crl = curl_init("http://localhost:4321/api/add");
 			curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
@@ -52,7 +50,7 @@
 			);
 			$result = curl_exec($crl);
 
-			echo '<div> Inscription réussie : '.$result.'</div>';
+			echo '<div> Inscription : '.$result.'</div>';
 			curl_close($crl);
 		}
 	?>

@@ -19,9 +19,9 @@
 		</div>
 		<div class="widget-shadow">
 			<div class="login-body wow fadeInUp animated" data-wow-delay=".7s">
-				<form action="../PageWeb/signin.php" method="get">
-					<input type="text" class="user" name="username" value="nabasy" placeholder="Username" required="">
-					<input type="password" class="lock" name="user_password" value="test" placeholder="Mot de passe">
+				<form action="../PageWeb/signin.php" method="post">
+					<input type="text" class="user" name="username" value="" placeholder="Username" required="">
+					<input type="password" class="lock" name="user_password" value="" placeholder="Mot de passe">
 					<input type="submit" name="login" value="Se connecter">
 					<!--
 					<div class="forgot-grid">
@@ -46,18 +46,30 @@
 	</div>
 	<div>
 		<?php
-			if(isset($_GET['login'])){
-				$username = $_GET['username'];
-				$password = $_GET['user_password'];
+			if(isset($_POST['login'])){
+				$connect = array(
+					'username' => $_POST['username'],
+					'password' => $_POST['user_password']
+				);
+				$myJSON = json_encode($connect);
 
-				$crl = curl_init("http://localhost:4321/api/auth?username=".$username."&password=".$password);
+				$_SESSION['connect'] = $myJSON;
+				
+				$crl = curl_init("http://localhost:4321/api/auth");
 				curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
 				curl_setopt($crl, CURLINFO_HEADER_OUT, true);
-
+				curl_setopt($crl, CURLOPT_POST, true);
+				curl_setopt($crl, CURLOPT_POSTFIELDS, $myJSON);
+				curl_setopt($crl, CURLOPT_HTTPHEADER, array(
+					'Content-Type: application/json',
+					'Body:'.$myJSON,
+					'Content-Lenght:'.strlen($myJSON))
+				);
 				$result = curl_exec($crl);
-				if($result <> 'Failed to connect'){ //Si c'est ok, utilisateur existe. On crée une session pour lui
-				//if('fhfdhw4fh564wfdhw4hwf4hwfh6whrhqe6h' <> 'Failed to connect'){
-					$_SESSION['userid'] = 'fhfdhw4fh564wfdhw4hwf4hwfh6whrhqe6h'; //Doit récupérer le tokenDealer
+				curl_close($crl);
+
+				if(strcmp($result, 'Failed to connect') <> 0){ //Si c'est ok, utilisateur existe. On crée une session pour lui
+					$_SESSION['userid'] = $result; //Doit récupérer le tokenDealer
 					$_SESSION['username'] = $username;
 					header('Location: ../PageWeb/index.php');
 				}else{

@@ -20,13 +20,28 @@
 		<div class="widget-shadow">
 			<div class="login-body">
 				<?php
-					$crl = curl_init("http://localhost:4321/api/person?username=".$_SESSION['username']);
+					$json = json_decode($_SESSION['connect']);
+					$password = $json->{'password'};
+					$connection = array(
+						'username' => $_SESSION['username'],
+						'password' => $password
+					);
+
+					$myJSON = json_encode($connection);
+
+					$crl = curl_init("http://localhost:4321/api/getUser");
 					curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
 					curl_setopt($crl, CURLINFO_HEADER_OUT, true);
+					curl_setopt($crl, CURLOPT_POST, true);
+					curl_setopt($crl, CURLOPT_POSTFIELDS, $myJSON);
+					curl_setopt($crl, CURLOPT_HTTPHEADER, array(
+						'Content-Type: application/json',
+						'Body:'.$myJSON,
+						'Content-Lenght:'.strlen($myJSON))
+					);
 
-					$json = curl_exec($crl);
-					$_SESSION['result']=$json;
-					$result = json_decode($json);
+					$data = curl_exec($crl);
+					$result = json_decode($data);
 
 					echo '<form class="wow fadeInUp animated" data-wow-delay=".7s"  action="../PageWeb/accountUser.php" method="post" enctype="application/json">';
 						echo '<input type="text" class="uemail" id="nom" name="nom" value="'.$result->{'nom'}.'" placeholder="Votre Nom" required="">';
@@ -41,10 +56,11 @@
 
 						echo '<input type="text" class="uemail" id="username" name="username" value="'.$result->{'username'}.'" placeholder="Votre Username" required="">';
 
-						//echo '<input type="password" id="password" name="password" n class="lock" value="test" placeholder="Mot de Passe">';
+						echo '<input type="password" id="password" name="password" n class="lock" value="'.$result->{'password'}.'" placeholder="Mot de Passe">';
 
+						curl_close($crl);*/
 					?>
-
+					
 					<input type="password" id="new_password" name="new_password" n class="lock" placeholder="Nouveau mot de passe">
 					<input type="password" id="password_verify" name="password_verify" n class="lock" placeholder="Vérifier votre mot de passe">
 					<input type="submit" name="update" value="Valider">
@@ -66,14 +82,16 @@
 			if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['update'])){
 				//Vérifier qu'on est authentifié
 				if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
-					$result = json_decode($_SESSION['result']);
-					$password = $result->{'password'};
+					$resultsession = json_decode($_SESSION['connect']);
+					echo $resultsession;
+
+					$password = $resultsession->{'password'};
+
+					echo 'Ici j\'ai mon password : '.$password;
 
 					//Vérifier le nouveau mot de passe
 					if(strcmp(isset($_POST['new_password']), isset($_POST['password_verify'])) == 0){
 						$password = $_POST['new_password'];
-					}elseif((isset($_POST['new_password']) == "") || (isset($_POST['password_verify'])) == "")){
-						$password = 'password'; //On récupère le password déjà existant
 					}else{
 						$_SESSION['error_update'] = 'Désolé mais la modification à échoué. Un ou plusieurs champs sont erronés';
 						header('Location: ../PageWeb/accountUser.php');
@@ -92,6 +110,10 @@
 					
 					$myJSON = json_encode($myRegister);
 					//echo $myJSON;
+					unset($_SESSION['result']);
+					$_SESSION['result'] = $myJSON;
+
+					echo $_SESSION['result'];
 
 					$crl = curl_init("http://localhost:4321/api/update");
 					curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
@@ -109,7 +131,6 @@
 					curl_close($crl);
 				}
 			}
-			*/
 		?>
 	</div>
 <br><br><br><br>
