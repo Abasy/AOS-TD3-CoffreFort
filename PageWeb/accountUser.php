@@ -82,61 +82,67 @@
 			if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['update'])){
 				//Vérifier qu'on est authentifié
 				if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
-					$resultsession = json_decode($_SESSION['connect']);
-					//echo $resultsession;
-
-					$password = $resultsession->{'password'};
-
-					echo 'Ici j\'ai mon password : '.$password;
+					if(isset($_SESSION['connect'])){
+						$resultsession = json_decode($_SESSION['connect']);
+						$password = $resultsession->{'password'};
+						echo 'Ici j\'ai mon password : '.$password;
+					}
+					
 
 					//Vérifier le nouveau mot de passe
-					if(strcmp(isset($_POST['new_password']), isset($_POST['password_verify'])) == 0){
-						$password = $_POST['new_password'];
-					}else{
+					if(strcmp(isset($_POST['new_password']), isset($_POST['password_verify'])) <> 0){
 						$_SESSION['error_update'] = 'Désolé mais la modification à échoué. Un ou plusieurs champs sont erronés';
 						header('Location: ../PageWeb/accountUser.php');
+					}else{
+						$password = $_POST['new_password'];
+						echo 'Mon nouveau password';
+
+						/*if(isset($password) != ""){
+
+						}*/
+
+						//Récupérer les nouvelles données
+						$myRegister = array(
+							'nom' => $_POST['nom'],
+							'prenom' => $_POST['prenom'],
+							'email' => $_POST['email'],
+							'adresse' => $_POST['adresse'],
+							'date' => $_POST['date'],
+							'username' => $_POST['username'],
+							'password' => $password
+						);
+					
+						$myJSON = json_encode($myRegister);
+
+						$crl = curl_init("http://localhost:4321/api/update");
+						curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($crl, CURLINFO_HEADER_OUT, true);
+						curl_setopt($crl, CURLOPT_POST, true);
+						curl_setopt($crl, CURLOPT_POSTFIELDS, $myJSON);
+						curl_setopt($crl, CURLOPT_HTTPHEADER, array(
+							'Content-Type: application/json',
+							'Body:'.$myJSON,
+							'Content-Lenght:'.strlen($myJSON))
+						);
+						$result = curl_exec($crl);
+
+						if(strcmp($result, 'Update Success') == 0){
+							$connection = array(
+								'username' => $_POST['username'],
+								'password' => $password
+							);
+
+							$myJSONconnect = json_encode($connection);
+							unset($_SESSION['connect']);
+							unset($_SESSION['username']);
+							$_SESSION['connect'] = $myJSONconnect;
+							$_SESSION['username'] = $_POST['username'];
+
+						}
 					}
 
-					//Récupérer les nouvelles données
-					$myRegister = array(
-						'nom' => $_POST['nom'],
-						'prenom' => $_POST['prenom'],
-						'email' => $_POST['email'],
-						'adresse' => $_POST['adresse'],
-						'date' => $_POST['date'],
-						'username' => $_POST['username'],
-						'password' => $password
-					);
 					
-					$myJSON = json_encode($myRegister);
-					//echo $myJSON;
-					unset($_SESSION['connect']);
-					unset($_SESSION['username']);
-
-					$connection = array(
-						'username' => $_POST['username'],
-						'password' => $password
-					);
-
-					$myJSONconnect = json_encode($connection);
-					$_SESSION['connect'] = $myJSONconnect;
-					$_SESSION['username'] = $_POST['username'];
-
-					echo $_SESSION['connect'];
-
-					$crl = curl_init("http://localhost:4321/api/update");
-					curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
-					curl_setopt($crl, CURLINFO_HEADER_OUT, true);
-					curl_setopt($crl, CURLOPT_POST, true);
-					curl_setopt($crl, CURLOPT_POSTFIELDS, $myJSON);
-					curl_setopt($crl, CURLOPT_HTTPHEADER, array(
-						'Content-Type: application/json',
-						'Body:'.$myJSON,
-						'Content-Lenght:'.strlen($myJSON))
-					);
-					$result = curl_exec($crl);
-
-					echo '<div> Modification réussite : '.$result.'</div>';
+					echo '<div> Modification : '.$result.'</div>';
 					curl_close($crl);
 				}
 			}

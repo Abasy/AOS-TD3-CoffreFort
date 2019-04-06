@@ -155,7 +155,7 @@ def UpdateUser():
                 response = "No such name"
         else:
             response = "Form invalid"
-    return jsonify({'result': response})
+    return response
 
 
 @app.route('/api/delete', methods=['DELETE'])
