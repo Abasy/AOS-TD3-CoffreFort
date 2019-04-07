@@ -1,48 +1,34 @@
 <?php
 	require_once('../PageWeb/header.php');
 ?>
-	<!--breadcrumbs-->
-	<div class="breadcrumbs">
-		<div class="container">
-			<ol class="breadcrumb breadcrumb1 animated wow fadeInUp" data-wow-delay=".5s">
-				<li><a href="index.php"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Accueil</a></li>
-				<li class="active">Se connecter</li>
-			</ol>
-		</div>
-	</div>
-	<!--//breadcrumbs-->
-	<!--login-->
-	<div class="login-page">
+<div class="container-fluid text-center">
 		<div class="title-info wow fadeInUp animated" data-wow-delay=".5s">
 			<h3 class="title">Connectez<span> Vous</span></h3>
-			
+			<?php
+			if (isset($_SESSION['error_authentication'])) {
+				echo '<div class="alert alert-danger" ><strong>Remarque: </strong>'.$_SESSION['error_authentication'].'</div>';
+				unset($_SESSION['error_authentication']);
+			}
+		?>
 		</div>
 		<div class="widget-shadow">
 			<div class="login-body wow fadeInUp animated" data-wow-delay=".7s">
 				<form action="../PageWeb/signin.php" method="post">
-					<input type="text" class="user" name="username" value="" placeholder="Username" required="">
-					<input type="password" class="lock" name="user_password" value="" placeholder="Mot de passe">
-					<input type="submit" name="login" value="Se connecter">
-					<!--
-					<div class="forgot-grid">
-						<label class="checkbox"><input type="checkbox" name="checkbox"><i></i>Remember me</label>
-						<div class="forgot">
-							<a href="#">Forgot Password?</a>
-						</div>
-						<div class="clearfix"> </div>
-					</div>-->
+					<div class="form-group">
+		                <label for="nom"></label>
+						<input type="text" class="form-control" name="username" value="" placeholder="Username" required="">
+					</div>
+					<div class="form-group">
+		                <label for="nom"></label>
+						<input type="password" class="form-control" name="user_password" value="" placeholder="Mot de passe">
+					</div>
+					<div class="form-group">
+		                <label for="nom"></label>
+						<button type="submit" class="btn btn-success" name="login" id="Ajouter">Se connecter</button>
+					</div>
 				</form>
 			</div>
 		</div>
-	</div>
-	<!--//login-->
-	<div>
-		<?php
-			if (isset($_SESSION['error_authentication'])) {
-				echo '<p>'.$_SESSION['error_authentication'].'</p>';
-				unset($_SESSION['error_authentication']);
-			}
-		?>
 	</div>
 	<div>
 		<?php

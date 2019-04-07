@@ -132,6 +132,7 @@ def UpdateUser():
             address = content['adresse']
             date = content['date']
             username = request.args.get("username")
+            newusername= content['username']
             password = content['password']
             s = collection.find_one({"username": username})
             if s:
@@ -141,7 +142,7 @@ def UpdateUser():
                     "email": email,
                     "adresse": address,
                     "date": date,
-                    "username": username,
+                    "username": newusername,
                     "password": password
                 }
                 # Update Data
