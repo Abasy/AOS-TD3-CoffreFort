@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route( '/api/arp', methods=['GET'] )
 def api_apr():
     test = request.headers
-	msg = ""
+    msg = ""
     if ( test["token_coffre_fort"] is not None ) :
         port = "5578"
         context = zmq.Context()
