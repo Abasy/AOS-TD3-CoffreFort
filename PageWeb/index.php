@@ -9,7 +9,7 @@
 			//Vérifier si l'utilisateur existe vraiment
 			if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
 				//Afficher la ressource ici
-				echo '<div> Ressources disponible : ';
+				echo '<div class="alert alert-success" ><strong>Remarque: </strong> Ressources disponible : ';
 				$crl = curl_init("http://localhost:5000/api/arp");
 
 				$header = array();
