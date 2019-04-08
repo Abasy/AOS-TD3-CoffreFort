@@ -19,13 +19,10 @@ def engine(iport):
 
     while True:
         msg = socket.recv()
-        print("recv fait")
         if msg != None:
-            print(msg)
             msg = msg.decode("UTF-8")
             code= msg.split(" ")
         if code[0]=="arp":
-        		print("Code 1 :"+code[1])
         		result=isValid(code[1])
         		if result==True:
         			socket.send_string("ok")
