@@ -20,19 +20,18 @@ def engine(iport):
     while True:
         msg = socket.recv()
         if msg != None:
-        	msg = msg.decode("UTF-8")
-        	code= msg.split(" ")
-        	if code[0]=="arp":
-        		print("Code 1 :"+code[1])
+            msg = msg.decode("UTF-8")
+            code= msg.split(" ")
+        if code[0]=="arp":
         		result=isValid(code[1])
         		if result==True:
         			socket.send_string("ok")
         		else:
         			socket.send_string("ko")
-        	elif code[1]=="logout":
+        elif code[1]=="logout":
         		validTokens.remove(code[2])
         		socket.send_string("logout with success ! ")
-        	if code[1]=="login":
+        if code[1]=="login":
         		#strr=code[2].decode("utf-8")
         		payload={'psw': code[2]}
         		jwt_token=jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)

@@ -11,12 +11,12 @@ def api_apr():
     if ( test["token_coffre_fort"] is not None ) :
         port = "5578"
         context = zmq.Context()
-        socket = context.socket(zmq.PAIR)
+        socket = context.socket(zmq.REQ)
         socket.connect("tcp://localhost:%s" % port)
-        socket.send_string("from apr : " + test["token_coffre_fort"])
-        port = "5766"
-        socket = context.socket(zmq.PAIR)
-        socket.setsockopt(zmq.RCVTIMEO, 5000) #évite que le receive soit bloquant
+        socket.send_string("arp " + test["token_coffre_fort"])
+#        port = "5766"
+#        socket = context.socket(zmq.PAIR)
+        socket.setsockopt(zmq.RCVTIMEO, 2000) #évite que le receive soit bloquant
         socket.connect("tcp://localhost:%s" % port)
         try : # necessaire car le timeout renvoi une erreur
             msg = socket.recv()
