@@ -1,11 +1,37 @@
 from flask import Flask, jsonify, request
 
 import zmq
+from flasgger import Swagger
 
 app = Flask(__name__)
+swagger = Swagger(app)
 
 @app.route( '/api/arp', methods=['GET'] )
 def api_apr():
+    """Example endpoint returning a secret ressource if the provided token is valid
+    This is using docstrings for specifications.
+    ---
+    definitions:
+      msg:
+        type: string
+      port:
+        type: string
+      test:
+        type: map
+        items:
+          type: json
+      context:
+        type: zmq_context
+      socket:
+        type: zmq_socket
+    responses:
+      200:
+        description: A JSON displaying the secret ressource or saying that the transaction failed
+        schema:
+          $ref: '#/definitions/test'
+        examples:
+          25lj_faux_token_zfv541: {'transaction': 'failed'}
+    """
     test = request.headers
     msg = ""
     if ( test["token_coffre_fort"] is not None ) :

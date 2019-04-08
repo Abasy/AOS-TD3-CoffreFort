@@ -69,8 +69,15 @@ Pour lancer les micro-services :
 		python tokendealer.py
 
 	* ApiApr
-
+		Pour lancer le service il suffit de tapper la commande suivante
 		python apiapr.py
+		
+		Ce service permet à un utilisateur connecté d'avoir accès à la ressource protégé.
+		
+		Pour contacter le service, il faut exploiter le lien suivant :
+		    * http://localhost:5000/api/arp
+		
+		Le service communique avec le token dealer pour savoir si le token renseigné par l'utilisateur vient bien de lui ou non.
 
 ## Build et exécution (avec Docker)
 Pour deployer les différents services sur le docker il faut lancer la commande suivante dans chaque service :
