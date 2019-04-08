@@ -77,7 +77,7 @@ def authentification():
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://localhost:%s" % port)
     msg = None
-    socket.send_string(name)
+    socket.send_string("bdd login "+name)
     print(name)
     if s:
         while msg == None:
