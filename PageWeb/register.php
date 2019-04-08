@@ -21,7 +21,7 @@ require_once('../PageWeb/header.php');
 					</div>
 					<div class="form-group">
 		                <label for="email"></label>
-						<input type="text" class="form-control"  id="email" name="email" value="" placeholder="Adresse E-mail" required="">
+						<input type="email" class="form-control"  id="email" name="email" value="" placeholder="Adresse E-mail" required="">
 					</div>
 					<div class="form-group">
 		                <label for="adresse"></label>

@@ -33,42 +33,44 @@
 	<div>
 		<?php
 			if(isset($_POST['login'])){
-				$connect = array(
-					'username' => $_POST['username'],
-					'password' => $_POST['user_password']
-				);
-				$myJSON = json_encode($connect);
+				//if(((!empty($_POST['username'])) && (!empty($_POST['user_password'])) ){
+					$connect = array(
+						'username' => $_POST['username'],
+						'password' => $_POST['user_password']
+					);
+					$myJSON = json_encode($connect);
 
-				$crl = curl_init("http://localhost:4321/api/auth");
-				curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($crl, CURLINFO_HEADER_OUT, true);
-				curl_setopt($crl, CURLOPT_POST, true);
-				curl_setopt($crl, CURLOPT_POSTFIELDS, $myJSON);
-				curl_setopt($crl, CURLOPT_HTTPHEADER, array(
-					'Content-Type: application/json',
-					'Body:'.$myJSON,
-					'Content-Lenght:'.strlen($myJSON))
-				);
+					$crl = curl_init("http://localhost:4321/api/auth");
+					curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($crl, CURLINFO_HEADER_OUT, true);
+					curl_setopt($crl, CURLOPT_POST, true);
+					curl_setopt($crl, CURLOPT_POSTFIELDS, $myJSON);
+					curl_setopt($crl, CURLOPT_HTTPHEADER, array(
+						'Content-Type: application/json',
+						'Body:'.$myJSON,
+						'Content-Lenght:'.strlen($myJSON))
+					);
 
-				//echo '<br><br>';
-				$result = curl_exec($crl);
-				curl_close($crl);
+					//echo '<br><br>';
+					$result = curl_exec($crl);
+					curl_close($crl);
 
-				if($result <> 'Failed to connect'){ //Si c'est ok, utilisateur existe. On crée une session pour lui
-					echo "Résultat donne ".$result;
-					unset($_SESSION['userid']);
-					unset($_SESSION['username']);
-					unset($_SESSION['connect']);
-					$_SESSION['userid'] = $result; //Doit récupérer le tokenDealer
-					$_SESSION['username'] = $_POST['username'];
-					$_SESSION['connect'] = $myJSON;
-					header('Location: ../PageWeb/index.php');
-				}else{
-					$_SESSION['error_authentication'] = 'Sorry but the authentication is failed. try again !';
-					echo '<script>
-					    	window.location.href = "../PageWeb/signin.php"
-					    </script>';
-				}
+					if($result <> 'Failed to connect'){ //Si c'est ok, utilisateur existe. On crée une session pour lui
+						echo "Résultat donne ".$result;
+						unset($_SESSION['userid']);
+						unset($_SESSION['username']);
+						unset($_SESSION['connect']);
+						$_SESSION['userid'] = $result; //Doit récupérer le tokenDealer
+						$_SESSION['username'] = $_POST['username'];
+						$_SESSION['connect'] = $myJSON;
+						header('Location: ../PageWeb/index.php');
+					}else{
+						$_SESSION['error_authentication'] = 'Sorry but the authentication is failed. try again !';
+						echo '<script>
+						    	window.location.href = "../PageWeb/signin.php"
+						    </script>';
+					}
+				//}
 			}
 		?>
 	</div>
