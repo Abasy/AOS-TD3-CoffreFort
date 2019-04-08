@@ -3,12 +3,12 @@ import random
 import sys
 import time
 
-port = "5576"
+port = "5556"
 context = zmq.Context()
-socket = context.socket(zmq.PAIR)
-socket.bind("tcp://*:%s" % port)
+socket = context.socket(zmq.REQ)
+socket.connect("tcp://localhost:%s" % port)
 
-while True:
-	msg = socket.recv()
-	print (msg)
-	time.sleep(1)
+socket.send_string("arp eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im1hbmFsIn0.oUbb0r7WtRsJJ8LF1a5Pj503m1_NPaY9OLyLrITQ5zs")
+msg = socket.recv()
+socket.close()
+print (msg)

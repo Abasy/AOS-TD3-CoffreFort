@@ -5,27 +5,49 @@ import sys
 import time
 import jwt
 
+
 JWT_SECRET = 'secret'
 JWT_ALGORITHM = 'HS256'
 JWT_EXP_DELTA_SECONDS = 20
+validTokens = []
 
 
-def engine(iport, oport):
+def engine(iport):
     context = zmq.Context()
     socket = context.socket(zmq.REP)
     socket.bind("tcp://*:%s" % iport)
 
-    socket2 = context.socket(zmq.PAIR)
-    socket2.connect("tcp://localhost:%s" % oport)
     while True:
         msg = socket.recv()
         if msg != None:
-            strr = msg.decode("utf-8")
-            payload = {'username': strr}
-            jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
-            print(jwt_token)
-            socket.send(jwt_token)
-            socket2.send(jwt_token)
-            time.sleep(1)
+        	msg = msg.decode("UTF-8")
+        	print("received : "+msg)
+        	code= msg.split(" ")
+        	if code[0]=="arp":
+        		print("Code 1 :"+code[1])
+        		result=isValid(code[1])
+        		if result==True:
+        			socket.send_string("ok")
+        		else:
+        			socket.send_string("ko")
+        	elif code[1]=="logout":
+        		validTokens.remove(code[2])
+        		socket.send_string("logout with success ! ")
+        	if code[1]=="login":
+        		#strr=code[2].decode("utf-8")
+        		payload={'username': code[2]}
+        		jwt_token=jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
+        		socket.send(jwt_token)
+        		validTokens.append(jwt_token.decode("utf-8"))
+        time.sleep(1)
+
+def isValid( token ):
+	for item in validTokens:
+		print('token : '+ item)
+		if item==token:
+			return True
+	return False
+	
 if __name__ == "__main__":
-    engine("5578", "5766")
+    a = int(sys.argv[1])
+    engine(a)
