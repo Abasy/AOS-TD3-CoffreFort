@@ -74,14 +74,23 @@ Pour lancer les micro-services :
 
 ## Build et exécution (avec Docker)
 Pour deployer les différents services sur le docker il faut lancer la commande suivante dans chaque service :
+
 	`docker build .`
+	
 Vous pouvez vérifier que chaque service se lance correctement en tapant la commande suivante :
+
 	`docker run <nom de build de service voulu>`
+	
 Et créer un réseau docker pour zmq afin d'établir la connexion entre les token dealer et les services qui l'interrogent avec la commande suivante :
+
 	`docker network create zmq`
+	
 Tapez cette commande pour lancer le token dealer en précisant le nom de domaine qui sera même que celui du code
+
 `docker run -it --network=zmq --net-alias=domaine_name <nom de build service>`
+
 Pour cette partie on a pas pu faire fonctionner le tous sur Docker à cause de server Apache qu'on utilise dans le côte Front end.
+
 
 
 	
