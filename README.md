@@ -66,7 +66,7 @@ Pour lancer les micro-services :
 
 	* TokenDealer
 
-		python tokendealer.py <NUMERO_PORT>
+		python tokendealer.py
 
 	* ApiApr
 
@@ -97,3 +97,9 @@ Pour cette partie on a pas pu faire fonctionner le tous sur Docker à cause de s
 ### Build du projet
 ### Execution de l'application
 Pour lancer les micro-services :
+- TokenDealer : 
+	Pour lancer le service tapez cette commande : `TokenDealer.py <NUMERO_PORT>`
+	Pour demander la génération d'un token ,on envoie sur la socket de ZMQ la requête suivante : `bdd login <PASSWORD>`
+	Pour rendre un token invalid (le cas d'une requête de connexion côté client) : `bdd logout <TOKEN>`
+	Pour verifier si un token est valide ou non : `arp <TOKEN>`
+
