@@ -1,4 +1,12 @@
 >> Launch TokenDealer microservice : 
 open a terminal and point to the TokenDealer.py directory
-run command : "python TokenDealer.py 5566 5766"
-then the TokenDealer is up and it waits for a message from userApi service.
+run command : "python TokenDealer.py 5556"
+then the TokenDealer is up and it waits for a message from userApi service and arp service.
+Messages form :
+1. To ask for a token (from userApi to login): 
+  bdd login <PASSWORD>
+2. To remove a token (from userApi to logout)
+  bdd logout <TOKEN>
+3. To check whether a token is valid or not (from arp)
+  arp <TOKEN>
+  => the answer : "ok" so that it is a valid token ( or "ko" otherwise)
