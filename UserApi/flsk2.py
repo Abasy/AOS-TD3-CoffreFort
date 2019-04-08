@@ -117,6 +117,22 @@ def getUser():
         msg = jsonify({"result": "No user founded with this inputs"})
     return msg
 
+@app.route('/api/logout', methods=['POST'])
+def logout():
+    content = request.get_json()
+    token = content["token"]
+    print(token)
+    port = "5578"
+    context = zmq.Context()
+    socket = context.socket(zmq.REQ)
+    socket.connect("tcp://localhost:%s" % port)
+    msg = None
+    socket.send_string("bdd logout "+token)
+    while msg == None:
+            str = socket.recv()
+            msg = str.decode("UTF-8")
+    return msg
+
 
 @app.route('/api/update', methods=['POST'])
 def UpdateUser():
