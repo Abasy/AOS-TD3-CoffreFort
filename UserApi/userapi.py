@@ -241,8 +241,7 @@ this method allows to delete a user from the database by using his username
 retur
 '''
     collection = mongo.db.users
-    content = request.get_json()
-    s = collection.remove({"username": content['username']})
+    s = collection.remove({"username": request.args.get("username")})
     if s:
         output = "Delete success"
     else:

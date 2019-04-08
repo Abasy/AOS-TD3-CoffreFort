@@ -5,11 +5,15 @@
 <div>
 	<?php
 		if (isset($_SESSION['success_delete'])) {
-			echo '<div class="alert alert-success" ><strong>Remarque: </strong>'.$_SESSION['success_delete'].' : Compte supprimé</div>';
+			echo '<div class="alert alert-success" ><strong>Remarque: </strong>'.$_SESSION['success_delete'].'</div>';
 			unset($_SESSION['success_delete']);
 		}
+		if (isset($_SESSION['success_authentication'])) {
+			echo '<div class="alert alert-success" ><strong>Remarque: </strong>'.$_SESSION['success_authentication'].'</div>';
+			unset($_SESSION['success_authentication']);
+		}
 		if (isset($_SESSION['no_connected'])) {
-			echo '<div class="alert alert-danger" ><strong>Remarque: </strong>'.$_SESSION['no_connected'].' : Compte supprimé</div>';
+			echo '<div class="alert alert-danger" ><strong>Remarque: </strong>'.$_SESSION['no_connected'].'</div>';
 			unset($_SESSION['no_connected']);
 		}
 	?>

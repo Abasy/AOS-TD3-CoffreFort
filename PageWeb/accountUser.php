@@ -79,9 +79,13 @@
 				</div>
 				<div class="form-group">
 	                <button type="submit" class="btn btn-success" name="update" id="update">Modifier</button>
-	                <button type="submit" class="btn btn-success" name="delete" id="delete">Suppr. compte</button>
 	            </div>
 			</form>
+			<div>
+				<form class="wow fadeInUp animated" data-wow-delay=".7s"  action="../PageWeb/accountUser.php" method="post">
+					<button type="submit" class="btn btn-success" name="delete" id="delete" >Suppr. compte</button>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
@@ -102,7 +106,6 @@
 					*/
 					if(isset($_SESSION['connect'])){
 						$password = $resultsession->{'password'};
-						//echo 'Ici j\'ai mon password : '.$password;
 					}
 				}else{
 					$password = $_POST['new_password'];
@@ -171,21 +174,18 @@
 		if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
 			if(isset($_SESSION['connect'])){
 				$resultsession = json_decode($_SESSION['connect']);
-				//$username = $resultsession->{'username'};
+				$username = $resultsession->{'username'};
 				//$password = $resultsession->{'password'};
 
-				$crl = curl_init("http://localhost:4321/api/delete");
+				$crl = curl_init("http://localhost:4321/api/delete?username=".$username);
 				curl_setopt($crl, CURLOPT_CUSTOMREQUEST, "DELETE");
-			    curl_setopt($crl, CURLOPT_POSTFIELDS, $resultsession);
+			    curl_setopt($crl, CURLOPT_POSTFIELDS, $username);
 			    curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
 				$result = curl_exec($crl);
-			    curl_close($ch);
+			    curl_close($crl);
 
 				if($result == 'Delete success'){
-					/*unset($_SESSION['connect']);
-					unset($_SESSION['username']);
-					unset($_SESSION['userid']);*/
-					$_SESSION['success_delete'] = $result;
+					//$_SESSION['success_delete'] = $result;
 					echo '<script>
 				    	window.location.href = "../PageWeb/signout.php"
 				    </script>';
