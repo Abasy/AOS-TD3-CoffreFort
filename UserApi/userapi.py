@@ -178,7 +178,8 @@ def UpdateUser():
 @app.route('/api/delete', methods=['DELETE'])
 def DeleteUser():
     collection = mongo.db.users
-    s = collection.remove({"username": request.args.get("username")})
+    content = request.get_json()
+    s = collection.remove({"username": content['username']})
     if s:
         output = "Delete success"
     else:

@@ -12,6 +12,10 @@
 		echo '<div class="alert alert-success" ><strong>Remarque: </strong>'.$_SESSION['success_update'].'</div>';
 		unset($_SESSION['success_update']);
 	}
+	if (isset($_SESSION['error_delete'])) {
+		echo '<div class="alert alert-danger" ><strong>Remarque: </strong>'.$_SESSION['error_delete'].' : problème lors de la suppression du compte</div>';
+		unset($_SESSION['error_delete']);
+	}
 ?>
 	</div>
 	<div class="widget-shadow">
@@ -53,12 +57,12 @@
 				<label for="prenom"></label><input type="text" class="form-control" id="prenom" name="prenom" value="'.$result->{'prenom'}.'" placeholder="Votre Prenom" required=""></div>';
 
 				echo '<div class="form-group">
-				<label for="email"></label><input type="text" class="form-control"  id="email" name="email" value="'.$result->{'email'}.'" placeholder="Adresse E-mail" required=""></div>';
+				<label for="email"></label><input type="email" class="form-control"  id="email" name="email" value="'.$result->{'email'}.'" placeholder="Adresse E-mail" required=""></div>';
 
 				echo '<div class="form-group">
 				<label for="adresse"></label><input type="text" class="form-control"  id="adresse" name="adresse" value="'.$result->{'adresse'}.'" placeholder="Adresse postale" required=""></div>';
 
-				echo '<div class="form-group"><label for="date"></label><input type="text" class="form-control" id="date" name="date" value="'.$result->{'date'}.'" placeholder="Date de naissance" required=""></div>';
+				echo '<div class="form-group"><label for="date"></label><input type="date" class="form-control" id="date" name="date" value="'.$result->{'date'}.'" placeholder="Date de naissance" required=""></div>';
 
 				echo '<div class="form-group">
 				<label for="username"></label><input type="text" class="form-control" id="username" name="username" value="'.$result->{'username'}.'" placeholder="Votre Username" required=""></div>';
@@ -105,50 +109,54 @@
 				}
 
 				$username = $_POST['username'];
-				//Récupérer les nouvelles données
-				$myRegister = array(
-					'nom' => $_POST['nom'],
-					'prenom' => $_POST['prenom'],
-					'email' => $_POST['email'],
-					'adresse' => $_POST['adresse'],
-					'date' => $_POST['date'],
-					'username' => $username,
-					'password' => $password
-				);
-			
-				$myJSON = json_encode($myRegister);
-
-				$crl = curl_init("http://localhost:4321/api/update?username=".$_SESSION['username']);
-				curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($crl, CURLINFO_HEADER_OUT, true);
-				curl_setopt($crl, CURLOPT_POST, true);
-				curl_setopt($crl, CURLOPT_POSTFIELDS, $myJSON);
-				curl_setopt($crl, CURLOPT_HTTPHEADER, array(
-					'Content-Type: application/json',
-					'Body:'.$myJSON,
-					'Content-Lenght:'.strlen($myJSON))
-				);
-				$result = curl_exec($crl);
-				curl_close($crl);
-
-				if($result == 'Update Success'){
-					$connection = array(
+				//Récupérer les nouvelles données. Interdire les champs vide
+				//if((!empty($_POST['nom'])) && (!empty($_POST['prenom'])) && (!empty($_POST['email'])) && (!empty($_POST['adresse'])) && (!empty($_POST['date'])) ){
+					$myRegister = array(
+						'nom' => $_POST['nom'],
+						'prenom' => $_POST['prenom'],
+						'email' => $_POST['email'],
+						'adresse' => $_POST['adresse'],
+						'date' => $_POST['date'],
 						'username' => $username,
 						'password' => $password
 					);
+			
+					$myJSON = json_encode($myRegister);
 
-					$myJSONconnect = json_encode($connection);
-					unset($_SESSION['connect']);
-					unset($_SESSION['username']);
-					unset($_SESSION['success_update']);
-					$_SESSION['connect'] = $myJSONconnect;
-					$_SESSION['username'] = $username;
-					$_SESSION['success_update'] = $result;
+					$crl = curl_init("http://localhost:4321/api/update?username=".$_SESSION['username']);
+					curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($crl, CURLINFO_HEADER_OUT, true);
+					curl_setopt($crl, CURLOPT_POST, true);
+					curl_setopt($crl, CURLOPT_POSTFIELDS, $myJSON);
+					curl_setopt($crl, CURLOPT_HTTPHEADER, array(
+						'Content-Type: application/json',
+						'Body:'.$myJSON,
+						'Content-Lenght:'.strlen($myJSON))
+					);
+					$result = curl_exec($crl);
+					curl_close($crl);
 
-				}else{
-					unset($_SESSION['error_update']);
-					$_SESSION['error_update'] = $result;
-				}
+					if($result == 'Update Success'){
+						$connection = array(
+							'username' => $username,
+							'password' => $password
+						);
+
+						$myJSONconnect = json_encode($connection);
+						unset($_SESSION['connect']);
+						unset($_SESSION['username']);
+						unset($_SESSION['success_update']);
+						$_SESSION['connect'] = $myJSONconnect;
+						$_SESSION['username'] = $username;
+						$_SESSION['success_update'] = $result;
+
+					}else{
+						unset($_SESSION['error_update']);
+						$_SESSION['error_update'] = $result;
+					}
+					
+				//}
+				
 			}else{
 				unset($_SESSION['error_update']);
 				$_SESSION['error_update'] = 'Désolé mais la modification à échoué. Un ou plusieurs champs sont erronés';
@@ -167,33 +175,36 @@
 				//$password = $resultsession->{'password'};
 
 				$crl = curl_init("http://localhost:4321/api/delete");
-				curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($crl, CURLINFO_HEADER_OUT, true);
-				curl_setopt($crl, CURLOPT_POST, true);
-				curl_setopt($crl, CURLOPT_POSTFIELDS, $resultsession);
-				curl_setopt($crl, CURLOPT_HTTPHEADER, array(
-					'Content-Type: application/json',
-					'Body:'.$resultsession,
-					'Content-Lenght:'.strlen($resultsession))
-				);
+				curl_setopt($crl, CURLOPT_CUSTOMREQUEST, "DELETE");
+			    curl_setopt($crl, CURLOPT_POSTFIELDS, $resultsession);
+			    curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
 				$result = curl_exec($crl);
-				curl_close($crl);
+			    curl_close($ch);
+
 				if($result == 'Delete success'){
-					unset($_SESSION['connect']);
+					/*unset($_SESSION['connect']);
 					unset($_SESSION['username']);
-					unset($_SESSION['userid']);
+					unset($_SESSION['userid']);*/
 					$_SESSION['success_delete'] = $result;
+					echo '<script>
+				    	window.location.href = "../PageWeb/signout.php"
+				    </script>';
 				}else{
 					unset($_SESSION['error_delete']);
 					$_SESSION['error_delete'] = $result;
+
+					echo '<script>
+				    	window.location.href = "../PageWeb/accountUser.php"
+				    </script>';
 				}
 			}else{
-				echo 'session perdu. Reconnectez-vous.';
+				unset($_SESSION['no_connected']);
+				$_SESSION['no_connected'] = 'Connexion perdu. Reconnectez-vous ou créer un compte.';
+				echo '<script>
+				    	window.location.href = "../PageWeb/index.php"
+				    </script>';
 			}
 		}
-		echo '<script>
-		    	window.location.href = "../PageWeb/index.php"
-		    </script>';
 	}
 ?>
 <!--//Compte utilisateur-->
