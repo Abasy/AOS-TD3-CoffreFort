@@ -1,0 +1,201 @@
+{
+	"info": {
+		"_postman_id": "0ff05582-58af-404d-8acd-321456f35956",
+		"name": "Api User",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nom\":\"Nadjim\",\n\t\"prenom\":\"FIFI\",\n\t\"email\":\"YASSIN@ata.fr\",\n\t\"adresse\":\"Agadir\",\n\t\"date\":\"05-05-1995\",\n\t\"username\":\"nadjim\",\n\t\"password\":\"bastien\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Authentification",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"raid\",\n\t\"password\":\"raid\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nom\":\"Vamos\",\n\t\"prenom\":\"YASSIN\",\n\t\"email\":\"yassin@FIFI.fr\",\n\t\"adresse\":\"Agadir\",\n\t\"date\":\"05-05-1995\",\n\t\"username\":\"vamos\",\n\t\"password\":\"raid\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/update?username=luffy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"update"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "luffy"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/delete?username=manal",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"delete"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "manal"
+						}
+					]
+				},
+				"description": " "
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4321/api/getUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\" :\"raid\",\n\t\"password\":\"raid\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/getUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"getUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4321/api/logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwc3ciOiJyYWlkIn0.3DhaADZYqwQmc4wcfnLG3It6XeSHcsZPPbaLzEK5smc\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4321/api/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4321",
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
