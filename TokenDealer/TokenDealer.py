@@ -21,7 +21,6 @@ def engine(iport):
         msg = socket.recv()
         if msg != None:
         	msg = msg.decode("UTF-8")
-        	print("received : "+msg)
         	code= msg.split(" ")
         	if code[0]=="arp":
         		print("Code 1 :"+code[1])
@@ -43,7 +42,6 @@ def engine(iport):
 
 def isValid( token ):
 	for item in validTokens:
-		print('token : '+ item)
 		if item==token:
 			return True
 	return False
