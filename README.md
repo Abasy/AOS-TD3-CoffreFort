@@ -35,8 +35,25 @@ Une fois le serveur lancé, on accéde au lien :
 
 Pour lancer les micro-services :
 	* APIUser
-
-		python userapi.py
+        Pour lancer le service il suffit de tapper la commande suivante
+        `python userapi.py`
+        Ce service permet de gérer les utilisateurs : Ajouter, Modifier et supprimer un utilisateur 
+        Il permet aussi de se connecter et se déconnecter du systéme.
+        Pour ajouter un utilisateur il faut exploiter le lien suivant :
+            * `http://localhost:4321/api/add`
+        Pour modifier un utilisateur
+            * `http://localhost:4321/api/update`
+        Pour Supprimer un utilisateur 
+            * `http://localhost:4321/api/delete`
+        Pour se connecter :
+            * `http://localhost:4321/api/auth`
+        pour se déconnecter :
+            * `http://localhost:4321/api/logout`
+        Pour avoir un utilisateur à partir de son username et password :
+            * `http://localhost:4321/api/getUser`
+        Le service communique avec le token dealer pour avoir un token valide, ainsi que pour invalider un token.
+             
+		
 
 	* TokenDealer
 
