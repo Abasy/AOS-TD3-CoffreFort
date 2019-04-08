@@ -40,7 +40,7 @@ Pour lancer les micro-services :
 
 	* TokenDealer
 
-		python TokenDealer.py
+		python tokendealer.py
 
 	* ApiApr
 
