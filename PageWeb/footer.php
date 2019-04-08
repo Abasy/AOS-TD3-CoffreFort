@@ -1,9 +1,10 @@
 <!--footer-->
+<div>
 	<footer class="container-fluid text-center">
-	  <p>ENSIBS Vannes - informatique de confiance : </p>
+	  <p>ENSIBS Vannes - informatique de confiance</p>
 	  <p>Réalisé par : Nadjim Abasy - Manal Bekaoui - Othmane Dziri - Bastien Luck - Yassin Ourkia </p>
 	</footer>
-					
+</div>		
 	<!--search jQuery-->
 	<script src="../PageWeb/js/main.js"></script>
 	<!--//search jQuery-->

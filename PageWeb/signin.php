@@ -50,11 +50,11 @@
 					'Content-Lenght:'.strlen($myJSON))
 				);
 
-				echo '<br><br>';
+				//echo '<br><br>';
 				$result = curl_exec($crl);
 				curl_close($crl);
 
-				if(strcmp($result, 'Failed to connect') <> 0){ //Si c'est ok, utilisateur existe. On crée une session pour lui
+				if($result <> 'Failed to connect'){ //Si c'est ok, utilisateur existe. On crée une session pour lui
 					echo "Résultat donne ".$result;
 					unset($_SESSION['userid']);
 					unset($_SESSION['username']);
@@ -64,8 +64,10 @@
 					$_SESSION['connect'] = $myJSON;
 					header('Location: ../PageWeb/index.php');
 				}else{
-					$_SESSION['error_authentication'] = 'Sorry but the authentication is failed';
-					header('Location: ../PageWeb/signin.php');
+					$_SESSION['error_authentication'] = 'Sorry but the authentication is failed. try again !';
+					echo '<script>
+					    	window.location.href = "../PageWeb/signin.php"
+					    </script>';
 				}
 			}
 		?>

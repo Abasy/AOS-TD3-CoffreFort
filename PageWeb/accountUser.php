@@ -81,12 +81,12 @@
 		</div>
 	</div>
 </div>
-<!--//login-->
+<!--//Compte utilisateur-->
 <?php
+	/*Modification des données du compte utilisateur*/
 	if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['update'])){
 		//Vérifier qu'on est authentifié
 		if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
-			echo $_SESSION['username'];
 			//Vérifier le nouveau mot de passe
 			if($_POST['new_password'] == $_POST['password_verify']){
 				//On récupère les données de la session
@@ -149,21 +149,54 @@
 					unset($_SESSION['error_update']);
 					$_SESSION['error_update'] = $result;
 				}
-				echo '<script>
-					    	window.location.href = "../PageWeb/accountUser.php"
-					    </script>';
 			}else{
 				unset($_SESSION['error_update']);
 				$_SESSION['error_update'] = 'Désolé mais la modification à échoué. Un ou plusieurs champs sont erronés';
-
-				echo '<script>
-				    	window.location.href = "../PageWeb/accountUser.php"
-				    </script>';
 			}
 		}
+		echo '<script>
+		    	window.location.href = "../PageWeb/accountUser.php"
+		    </script>';
+	}
+	/*Suppression de compte*/
+	if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['delete'])){
+		if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
+			if(isset($_SESSION['connect'])){
+				$resultsession = json_decode($_SESSION['connect']);
+				//$username = $resultsession->{'username'};
+				//$password = $resultsession->{'password'};
+
+				$crl = curl_init("http://localhost:4321/api/delete");
+				curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($crl, CURLINFO_HEADER_OUT, true);
+				curl_setopt($crl, CURLOPT_POST, true);
+				curl_setopt($crl, CURLOPT_POSTFIELDS, $resultsession);
+				curl_setopt($crl, CURLOPT_HTTPHEADER, array(
+					'Content-Type: application/json',
+					'Body:'.$resultsession,
+					'Content-Lenght:'.strlen($resultsession))
+				);
+				$result = curl_exec($crl);
+				curl_close($crl);
+				if($result == 'Delete success'){
+					unset($_SESSION['connect']);
+					unset($_SESSION['username']);
+					unset($_SESSION['userid']);
+					$_SESSION['success_delete'] = $result;
+				}else{
+					unset($_SESSION['error_delete']);
+					$_SESSION['error_delete'] = $result;
+				}
+			}else{
+				echo 'session perdu. Reconnectez-vous.';
+			}
+		}
+		echo '<script>
+		    	window.location.href = "../PageWeb/index.php"
+		    </script>';
 	}
 ?>
-<br><br><br><br>
+<!--//Compte utilisateur-->
 <?php
 	require_once('../PageWeb/footer.php');
 ?>

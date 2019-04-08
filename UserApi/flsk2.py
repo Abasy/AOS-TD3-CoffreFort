@@ -167,7 +167,7 @@ def DeleteUser():
         output = "Delete success"
     else:
         output = "Delete Failed"
-    return jsonify({"result": output})
+    return output
 
 
 @app.route('/api/person/<int:person_id>')

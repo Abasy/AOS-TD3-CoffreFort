@@ -33,9 +33,12 @@
 		    }
 		    /* Set black background color, white text and some padding */
 		    footer {
-		        background-color:  #555;
-		      color: white;
-		      padding: 15px;
+		    	position: fixed;
+		      	bottom: 0;
+    			background-color:  #555;
+		      	color: white;
+		      	padding: 15px;
+		      	width: 100%;
 		    }
 		    /* On small screens, set height to 'auto' for sidenav and grid */
 		    @media screen and (max-width: 767px) {
@@ -60,18 +63,18 @@
 		    </div>
 		    <div class="collapse navbar-collapse" id="myNavbar">
 		    	<ul class="nav navbar-nav">
-					<li class="active"><a href="index.php"">Accueil</a></li>
+					<li class="active"><a href="index.php">Accueil</a></li>
 				</ul>
 		    	<?php if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
 							echo '<ul class="nav navbar-nav">
-								<li class="active"><a href="../PageWeb/accountUser.php"">Mon Compte ['.$_SESSION['username'].']</a></li>
+								<li class="active"><a href="../PageWeb/accountUser.php">Mon Compte ['.$_SESSION['username'].']</a></li>
 		      				</ul>
 						    <ul class="nav navbar-nav navbar-right">
 						        <li><a href="../PageWeb/signout.php"><span class="glyphicon glyphicon-log-out"></span> Se déconnecter</a></li>
 						    </ul>';
 					}else{
 							echo '<ul class="nav navbar-nav">
-		        					<li class="active"><a href="../PageWeb/register.php"">s\'inscrire</a></li>
+		        					<li class="active"><a href="../PageWeb/register.php">s\'inscrire</a></li>
 		      					</ul>
 						    <ul class="nav navbar-nav navbar-right">
 						        <li><a href="../PageWeb/signin.php"><span class="glyphicon glyphicon-log-in"></span> Se Connecter</a></li>

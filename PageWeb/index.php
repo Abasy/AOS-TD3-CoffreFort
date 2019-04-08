@@ -2,28 +2,38 @@
 	require_once('../PageWeb/header.php');
 ?>
 <br><br><br><br>
+<div>
+	<?php
+		if (isset($_SESSION['error_delete'])) {
+			echo '<div class="alert alert-danger" ><strong>Remarque: </strong>'.$_SESSION['error_delete'].' : problème lors de la suppression du compte</div>';
+			unset($_SESSION['error_delete']);
+		}
+		if (isset($_SESSION['success_delete'])) {
+			echo '<div class="alert alert-success" ><strong>Remarque: </strong>'.$_SESSION['success_delete'].' : Compte supprimé</div>';
+			unset($_SESSION['success_delete']);
+		}
+	?>
+</div>
 
 <div>
 	<?php
-		//if(($_SERVER['REQUEST_METHOD'] == 'GET') && isset($_GET['login'])){
-			//Vérifier si l'utilisateur existe vraiment
-			if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
-				//Afficher la ressource ici
-				echo '<div class="alert alert-success" ><strong>Remarque: </strong> Ressources disponible : ';
-				$crl = curl_init("http://localhost:5000/api/arp");
+		//Vérifier si l'utilisateur existe vraiment
+		if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
+			//Afficher la ressource ici
+			echo '<div class="alert alert-success" ><strong>Remarque: </strong> Ressources disponible : ';
+			$crl = curl_init("http://localhost:5000/api/arp");
 
-				$header = array();
-				$header[] = 'token_coffre_fort: '.$_SESSION['userid'];
-				
-				curl_setopt($crl, CURLOPT_HTTPHEADER,$header);
-				$result = curl_exec($crl);
-				
-				curl_close($crl);
-				echo '</div>';
-				//print_r($rest);
-			}else{
-				echo '<div><p>Not authenticate ? You will don\'t get the ressources ! </p></div>';
-			}
+			$header = array();
+			$header[] = 'token_coffre_fort: '.$_SESSION['userid'];
+			
+			curl_setopt($crl, CURLOPT_HTTPHEADER,$header);
+			$result = curl_exec($crl);
+			
+			curl_close($crl);
+			echo '</div>';
+		}else{
+			echo '<div><p>Not authenticated : you will don\'t get the ressources yet ! </p></div>';
+		}
 
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['register'])){
 			$myRegister = array(
