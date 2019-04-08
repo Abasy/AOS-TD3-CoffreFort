@@ -34,7 +34,7 @@ def engine(iport):
         		socket.send_string("logout with success ! ")
         	if code[1]=="login":
         		#strr=code[2].decode("utf-8")
-        		payload={'username': code[2]}
+        		payload={'psw': code[2]}
         		jwt_token=jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
         		socket.send(jwt_token)
         		validTokens.append(jwt_token.decode("utf-8"))
