@@ -19,7 +19,22 @@ Less Basics Microservices
 With usage of variables in the app.route
 """
 
-
+'''
+This method allows to Add User to the database (MongoDB) using a POST method and a given body in JSON format
+The body must respect the scheme defined in JSONScheme
+an example of a good data body :
+{
+    "nom":"Bastien",
+    "prenom":"FIFI",
+    "email":"YASSIN@ata.fr",
+    "adresse":"Agadir",
+    "date":"05-05-1995",
+    "username":"nadjim",
+    "password":"bastien"
+}
+the Header must contain Content-type : application/json
+this method return a json file : {result : message }  
+'''
 @app.route('/api/add', methods=['POST'])
 def AddUser():
     # if request.method == "POST":
@@ -62,7 +77,18 @@ def AddUser():
         #   print(record)
         return response
 
-
+'''
+This method allows to authenticate to the system, using a username and password
+using a POST method an json file in body with format :
+{
+    "username":"raid",
+    "password":"raid"
+}
+this method check if the user is existed in the database, and verify that password is good.
+this method communicate with the Token Dealer service in order to get a valid token for the current session 
+of the user, this communication is done by a middleware solution (ZMQ), 
+this method return a message if the authentication is properly done or not.
+'''
 @app.route('/api/auth', methods=['POST'])
 def authentification():
     content = request.get_json()
@@ -87,7 +113,16 @@ def authentification():
         msg = "Failed to connect"
     return msg
 
-
+'''
+this method allows to get a user data from the database, using his username and password
+same thing this method is done with a POST method and json file in the body content
+{
+    "username":"raid",
+    "password":"raid"
+}
+if inputs are good, the method returns the user data in json file
+else return a message not found
+'''
 @app.route('/api/getUser', methods=['POST'])
 def getUser():
     content = request.get_json()
@@ -116,7 +151,12 @@ def getUser():
     else:
         msg = jsonify({"result": "No user founded with this inputs"})
     return msg
-
+'''
+this method allows to logout 
+the logout is done using the token of the current session of user
+the method communicate with the token dealer service in order to invalid the token, then logout successfuly
+the method return a message recieved from the token dealer
+'''
 @app.route('/api/logout', methods=['POST'])
 def logout():
     content = request.get_json()
@@ -133,7 +173,21 @@ def logout():
             msg = str.decode("UTF-8")
     return msg
 
+'''
+this method allows to udate a user by modifying his current data,
+the method is done by POST method and field username to specify the username to update and its body is defined like this :
+{
+    "nom":"Vamos",
+    "prenom":"YASSIN",
+    "email":"yassin@FIFI.fr",
+    "adresse":"Agadir",
+    "date":"05-05-1995",
+    "username":"vamos",
+    "password":"raid"
+}
+this method return weither the user is updated or not
 
+'''
 @app.route('/api/update', methods=['POST'])
 def UpdateUser():
     collection = mongo.db.users
@@ -174,7 +228,10 @@ def UpdateUser():
             response = "Form invalid"
     return response
 
-
+'''
+this method allows to delete a user from the database by using his username
+retur
+'''
 @app.route('/api/delete', methods=['DELETE'])
 def DeleteUser():
     collection = mongo.db.users
@@ -187,10 +244,6 @@ def DeleteUser():
     return output
 
 
-@app.route('/api/person/<int:person_id>')
-def person(person_id):
-    response = jsonify({'Hello': person_id})
-    return response
 
 
 def fonction_demo(dict_to_test, dict_valid):
