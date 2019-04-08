@@ -19,7 +19,10 @@ Less Basics Microservices
 With usage of variables in the app.route
 """
 
-'''
+
+@app.route('/api/add', methods=['POST'])
+def AddUser():
+    '''
 This method allows to Add User to the database (MongoDB) using a POST method and a given body in JSON format
 The body must respect the scheme defined in JSONScheme
 an example of a good data body :
@@ -35,8 +38,6 @@ an example of a good data body :
 the Header must contain Content-type : application/json
 this method return a json file : {result : message }  
 '''
-@app.route('/api/add', methods=['POST'])
-def AddUser():
     # if request.method == "POST":
     #    print("got request method POST")
     if request.is_json:
@@ -77,7 +78,10 @@ def AddUser():
         #   print(record)
         return response
 
-'''
+
+@app.route('/api/auth', methods=['POST'])
+def authentification():
+    '''
 This method allows to authenticate to the system, using a username and password
 using a POST method an json file in body with format :
 {
@@ -89,8 +93,6 @@ this method communicate with the Token Dealer service in order to get a valid to
 of the user, this communication is done by a middleware solution (ZMQ), 
 this method return a message if the authentication is properly done or not.
 '''
-@app.route('/api/auth', methods=['POST'])
-def authentification():
     content = request.get_json()
 
     name = content["username"]
@@ -113,7 +115,10 @@ def authentification():
         msg = "Failed to connect"
     return msg
 
-'''
+
+@app.route('/api/getUser', methods=['POST'])
+def getUser():
+    '''
 this method allows to get a user data from the database, using his username and password
 same thing this method is done with a POST method and json file in the body content
 {
@@ -123,8 +128,6 @@ same thing this method is done with a POST method and json file in the body cont
 if inputs are good, the method returns the user data in json file
 else return a message not found
 '''
-@app.route('/api/getUser', methods=['POST'])
-def getUser():
     content = request.get_json()
     name = content["username"]
     password = content["password"]
@@ -151,14 +154,15 @@ def getUser():
     else:
         msg = jsonify({"result": "No user founded with this inputs"})
     return msg
-'''
+
+@app.route('/api/logout', methods=['POST'])
+def logout():
+    '''
 this method allows to logout 
 the logout is done using the token of the current session of user
 the method communicate with the token dealer service in order to invalid the token, then logout successfuly
 the method return a message recieved from the token dealer
 '''
-@app.route('/api/logout', methods=['POST'])
-def logout():
     content = request.get_json()
     token = content["token"]
     print(token)
@@ -173,7 +177,10 @@ def logout():
             msg = str.decode("UTF-8")
     return msg
 
-'''
+
+@app.route('/api/update', methods=['POST'])
+def UpdateUser():
+    '''
 this method allows to udate a user by modifying his current data,
 the method is done by POST method and field username to specify the username to update and its body is defined like this :
 {
@@ -188,8 +195,6 @@ the method is done by POST method and field username to specify the username to 
 this method return weither the user is updated or not
 
 '''
-@app.route('/api/update', methods=['POST'])
-def UpdateUser():
     collection = mongo.db.users
     if request.is_json:
         content = request.get_json()
@@ -228,12 +233,13 @@ def UpdateUser():
             response = "Form invalid"
     return response
 
-'''
+
+@app.route('/api/delete', methods=['DELETE'])
+def DeleteUser():
+    '''
 this method allows to delete a user from the database by using his username
 retur
 '''
-@app.route('/api/delete', methods=['DELETE'])
-def DeleteUser():
     collection = mongo.db.users
     content = request.get_json()
     s = collection.remove({"username": content['username']})
@@ -247,6 +253,10 @@ def DeleteUser():
 
 
 def fonction_demo(dict_to_test, dict_valid):
+    '''
+this method allows to validate a json file by using a json scheme already defined 
+in our case the json scheme validator is defined in userScheme.json
+'''
     try:
         validate(dict_to_test, dict_valid)
     except Exception as valid_err:
