@@ -7,20 +7,17 @@ from jsonschema import validate
 import random
 import sys
 import time
+from flasgger import Swagger
+from flask_pymongo import PyMongo
 
 app = Flask(__name__)
-from flask_pymongo import PyMongo
+swagger = Swagger(app)
 
 app.config['MONGO_DBNAME'] = 'Users'
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/Users'
 mongo = PyMongo(app)
-"""
-Less Basics Microservices
-With usage of variables in the app.route
-"""
 
-'''
-This method allows to Add User to the database (MongoDB) using a POST method and a given body in JSON format
+""" This method allows to Add User to the database (MongoDB) using a POST method and a given body in JSON format
 The body must respect the scheme defined in JSONScheme
 an example of a good data body :
 {
@@ -34,11 +31,45 @@ an example of a good data body :
 }
 the Header must contain Content-type : application/json
 this method return a json file : {result : message }  
-'''
+"""
 @app.route('/api/add', methods=['POST'])
 def AddUser():
-    # if request.method == "POST":
-    #    print("got request method POST")
+    """ Endpoint allowing to add user to the database
+    ---
+    definitions:
+      msg:
+        type: string
+      port:
+        type: string
+      addUser:
+        type: json
+        properties:{
+                        "nom":"Bastien",
+                        "prenom":"FIFI",
+                        "email":"YASSIN@ata.fr",
+                        "adresse":"Agadir",
+                        "date":"05-05-1995",
+                        "username":"nadjim",
+                        "password":"bastien"
+                    }
+      context:
+        type: zmq_context
+      socket:
+        type: zmq_socket
+    responses:
+      200:
+        description: A JSON that containt a message if success to register an user
+        schema:
+          $ref: '#/definitions/addUser'
+          exemples:
+            success:{"result": "Add Success"}
+      201:
+        description: A JSON that containt a message if fail to register an user
+        schema:
+          $ref: '#/definitions/addUser'
+          exemples:
+            success:{"result": "Add Failed"}
+    """
     if request.is_json:
         content = request.get_json()
         with open("userSchem.json", "r") as fichier:
@@ -77,8 +108,7 @@ def AddUser():
         #   print(record)
         return response
 
-'''
-This method allows to authenticate to the system, using a username and password
+""" This method allows to authenticate to the system, using a username and password
 using a POST method an json file in body with format :
 {
     "username":"raid",
@@ -88,9 +118,43 @@ this method check if the user is existed in the database, and verify that passwo
 this method communicate with the Token Dealer service in order to get a valid token for the current session 
 of the user, this communication is done by a middleware solution (ZMQ), 
 this method return a message if the authentication is properly done or not.
-'''
+"""
 @app.route('/api/auth', methods=['POST'])
 def authentification():
+    """Endpoint allowing to authenticate to the system,
+    using a username and password
+    ---
+    definitions:
+      Authentication:
+        type: json
+        properties:
+          authentication:
+            type: json
+            exmeple:{
+                        "username":"raid",
+                        "password":"raid"
+                    }
+        context:
+            type: zmq_context
+        socket:
+            type: zmq_socket
+      Token:
+        type: string
+    responses:
+      200:
+        description: A valid token for a session
+        schema:
+          $ref: '#/definitions/Authentication'
+        examples:
+          token_coffre_fort: SOME-CHARACTERES.ANOTHER-ONE.FINAL-CHARACTERES
+
+      201:
+        description: An invalid token
+        schema:
+          $ref: '#/definitions/Authentication'
+        examples:
+          msg: "Failed to connect"
+    """
     content = request.get_json()
 
     name = content["username"]
@@ -113,8 +177,7 @@ def authentification():
         msg = "Failed to connect"
     return msg
 
-'''
-this method allows to get a user data from the database, using his username and password
+""" this method allows to get a user data from the database, using his username and password
 same thing this method is done with a POST method and json file in the body content
 {
     "username":"raid",
@@ -122,9 +185,46 @@ same thing this method is done with a POST method and json file in the body cont
 }
 if inputs are good, the method returns the user data in json file
 else return a message not found
-'''
+"""
 @app.route('/api/getUser', methods=['POST'])
 def getUser():
+    """ Endpoint allowing to get a user data from the database, using his username and password
+    ---
+    definitions:
+      GetUser:
+        type: json
+        properties:
+          getuser:
+            type: json
+            exmeple:{
+                        "username":"raid",
+                        "password":"raid"
+                    }
+        context:
+            type: zmq_context
+        socket:
+            type: zmq_socket
+    responses:
+      200:
+        description: A json that contain data user
+        schema:
+          $ref: '#/definitions/GetUser'
+        result: {
+                        "nom":"Bastien",
+                        "prenom":"FIFI",
+                        "email":"YASSIN@ata.fr",
+                        "adresse":"Agadir",
+                        "date":"05-05-1995",
+                        "username":"nadjim",
+                        "password":"bastien"
+                    }
+
+      201:
+        description: A json that contain a result error
+        schema:
+          $ref: '#/definitions/GetUser'
+        result: {"result": "No user founded with this inputs"}
+    """
     content = request.get_json()
     name = content["username"]
     password = content["password"]
@@ -151,14 +251,41 @@ def getUser():
     else:
         msg = jsonify({"result": "No user founded with this inputs"})
     return msg
-'''
-this method allows to logout 
+
+
+""" this method allows to logout 
 the logout is done using the token of the current session of user
 the method communicate with the token dealer service in order to invalid the token, then logout successfuly
 the method return a message recieved from the token dealer
-'''
+"""
 @app.route('/api/logout', methods=['POST'])
 def logout():
+    """ Endpoint allowing to logout
+    ---
+    definitions:
+      Logout:
+        type: json
+        properties:
+          token:
+            type: json
+            exmeple:{
+                        "token":"SOME-CHARACTERES.ANOTHER-ONE.FINAL-CHARACTERES",
+                    }
+        context:
+            type: zmq_context
+        socket:
+            type: zmq_socket
+    responses:
+      200:
+        description: token is deleted
+        schema:
+          $ref: '#/definitions/Logout'
+
+      201:
+        description: token is not deleted or is not existing
+        schema:
+          $ref: '#/definitions/Logout'
+    """
     content = request.get_json()
     token = content["token"]
     print(token)
@@ -173,8 +300,7 @@ def logout():
             msg = str.decode("UTF-8")
     return msg
 
-'''
-this method allows to udate a user by modifying his current data,
+""" this method allows to udate a user by modifying his current data,
 the method is done by POST method and field username to specify the username to update and its body is defined like this :
 {
     "nom":"Vamos",
@@ -186,10 +312,45 @@ the method is done by POST method and field username to specify the username to 
     "password":"raid"
 }
 this method return weither the user is updated or not
-
-'''
+"""
 @app.route('/api/update', methods=['POST'])
 def UpdateUser():
+    """ Endpoint allowing to udate a user by modifying his current data
+    ---
+    definitions:
+      UpdateUser:
+        type: json
+        properties:
+          updateuser:
+            type: json
+            exmeple:{
+                        "nom":"Vamos",
+                        "prenom":"YASSIN",
+                        "email":"yassin@FIFI.fr",
+                        "adresse":"Agadir",
+                        "date":"05-05-1995",
+                        "username":"vamos",
+                        "password":"raid"
+                    }
+        context:
+            type: zmq_context
+        socket:
+            type: zmq_socket
+    responses:
+      200:
+        description: A json that contain the update data user
+        schema:
+          $ref: '#/definitions/UpdateUser'
+        result: "Update Success"
+
+      201:
+        description: An invalid json for update
+        schema:
+          $ref: '#/definitions/UpdateUser'
+        result1: "Update Failed"
+        result2: "No such name"
+        result3: "Form invalid"
+    """
     collection = mongo.db.users
     if request.is_json:
         content = request.get_json()
@@ -228,12 +389,39 @@ def UpdateUser():
             response = "Form invalid"
     return response
 
-'''
-this method allows to delete a user from the database by using his username
-retur
-'''
+""" this method allows to delete a user from the database by using his username
+return
+"""
 @app.route('/api/delete', methods=['DELETE'])
 def DeleteUser():
+    """ Endpoint allowing to delete a user from the database by using his username
+    ---
+    definitions:
+      Delete:
+        type: json
+        properties:
+          username:
+            type: String
+            exmeple:{
+                        "username":"raid",
+                    }
+        context:
+            type: zmq_context
+        socket:
+            type: zmq_socket
+    responses:
+      200:
+        description: delete an user
+        schema:
+          $ref: '#/definitions/Delete'
+        result: "Delete success"
+
+      201:
+        description: delete user failed
+        schema:
+          $ref: '#/definitions/Delete'
+        result: "Delete Failed"
+    """
     collection = mongo.db.users
     s = collection.remove({"username": request.args.get("username")})
     if s:
@@ -241,8 +429,6 @@ def DeleteUser():
     else:
         output = "Delete Failed"
     return output
-
-
 
 
 def fonction_demo(dict_to_test, dict_valid):

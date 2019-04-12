@@ -3,6 +3,11 @@
 <div class="container-fluid text-center">
 	<div class="title-info wow fadeInUp animated" data-wow-delay=".5s">
 		<h3 class="title">Information <span> utilisateur</span></h3>
+		<div>
+			<form class="wow fadeInUp animated" data-wow-delay=".7s"  action="../PageWeb/accountUser.php" method="post">
+				<button type="submit" class="btn btn-success" name="delete" id="delete" >Suppr. compte</button>
+			</form>
+		</div>
 <?php
 	if (isset($_SESSION['error_update'])) {
 		echo '<div class="alert alert-danger" ><strong>Remarque: </strong>'.$_SESSION['error_update'].'</div>';

@@ -4,7 +4,11 @@ import random
 import sys
 import time
 import jwt
+from flask import Flask
+from flasgger import Swagger
 
+app = Flask(__name__)
+swagger = Swagger(app)
 
 JWT_SECRET = 'secret'
 JWT_ALGORITHM = 'HS256'
@@ -13,11 +17,29 @@ validTokens = []
 
 
 def engine(iport):
-    """ engine is a function that listen to a socket on localhost with the port passed in parameter and answer the requested 
-    information : 
-    1. Generate a token based on a given password
-    2. verify whether the token is valid or not
-    3. Make a token invalid
+    """Example endpoint :
+		1. generating a token based on a given password if user login
+		2. verifing whether the token is valid or not in order to access the hiden ressources
+		3. deleting a token registered if the user logout
+    ---
+	definitions:
+      msg:
+        type: string
+      port:
+        type: string
+      test:
+        type: map
+        items:
+          type: json
+      context:
+        type: zmq_context
+      socket:
+        type: zmq_socket
+    responses:
+      200:
+        description: 1. generating a token based on a given password if user login
+					2. verifing whether the token is valid or not in order to access the hiden ressources
+					3. deleting a token registered if the user logout
     """
     #Configuration of the ZMQ : 
     context = zmq.Context()
@@ -29,8 +51,8 @@ def engine(iport):
         if msg != None:
             msg = msg.decode("UTF-8")
             code= msg.split(" ")
-        #if it is a request from "arp" service
-        if code[0]=="arp":
+        #if it is a request from "apr" service
+        if code[0]=="apr":
             result=isValid(code[1])
             if result==True:
                 socket.send_string("ok")

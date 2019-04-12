@@ -54,7 +54,7 @@
 					$result = curl_exec($crl);
 					curl_close($crl);
 
-					if($result <> 'Failed to connect'){ //Si c'est ok, utilisateur existe. On crée une session pour lui
+					if($result <> 'Failed to connect'){
 						unset($_SESSION['userid']);
 						unset($_SESSION['username']);
 						unset($_SESSION['connect']);
@@ -62,11 +62,13 @@
 						$_SESSION['username'] = $_POST['username'];
 						$_SESSION['connect'] = $myJSON;
 
+						setcookie('token_coffre_fort',$result,time()+3600);
+
 						$_SESSION['success_authentication'] = 'You are connected !';
 						echo '<script>
 						    	window.location.href = "../PageWeb/index.php"
 						    </script>';
-					}else{
+					}else{//Si c'est ok, utilisateur existe. On crée une session pour lui
 						$_SESSION['error_authentication'] = 'Sorry but the authentication is failed. try again !';
 						echo '<script>
 						    	window.location.href = "../PageWeb/signin.php"

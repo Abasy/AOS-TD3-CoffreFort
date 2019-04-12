@@ -25,14 +25,13 @@
 		if(isset($_SESSION['userid']) && isset($_SESSION['username'])){
 			//Afficher la ressource ici
 			echo '<div class="alert alert-success" ><strong>Remarque: </strong> Ressources disponible : ';
-			$crl = curl_init("http://localhost:5000/api/arp");
+			$crl = curl_init("http://localhost:5000/api/apr");
 
 			$header = array();
-			$header[] = 'token_coffre_fort: '.$_SESSION['userid'];
+			$header[] = 'token_coffre_fort: '.$_COOKIE['token_coffre_fort'];
 			
 			curl_setopt($crl, CURLOPT_HTTPHEADER,$header);
 			$result = curl_exec($crl);
-			
 			curl_close($crl);
 			echo '</div>';
 		}else{
@@ -73,8 +72,6 @@
 	?>
 </div>
 
-
-<br><br><br><br>
 <?php
 	require_once('../PageWeb/footer.php');
 ?>

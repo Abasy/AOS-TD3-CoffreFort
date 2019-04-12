@@ -6,7 +6,7 @@ from flasgger import Swagger
 app = Flask(__name__)
 swagger = Swagger(app)
 
-@app.route( '/api/arp', methods=['GET'] )
+@app.route( '/api/apr', methods=['GET'] )
 def api_apr():
     """Example endpoint returning a secret ressource if the provided token is valid
     This is using docstrings for specifications.
@@ -39,7 +39,7 @@ def api_apr():
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
         socket.connect("tcp://localhost:%s" % port)
-        socket.send_string("arp " + test["token_coffre_fort"])
+        socket.send_string("apr " + test["token_coffre_fort"])
 #        port = "5766"
 #        socket = context.socket(zmq.PAIR)
         socket.setsockopt(zmq.RCVTIMEO, 2000) #évite que le receive soit bloquant
